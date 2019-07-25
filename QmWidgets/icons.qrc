@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/analog_clock_dial.png</file>
+        <file>icons/analog_clock_hour_hand.png</file>
+        <file>icons/analog_clock_minute_hand.png</file>
+        <file>icons/analog_clock_second_hand.png</file>
+    </qresource>
+</RCC>
