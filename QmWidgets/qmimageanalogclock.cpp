@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QPainter>
 #include <QPixmap>
+#include <QGraphicsDropShadowEffect>
 
 
 class QmImageAnalogClockPrivate {
@@ -44,6 +45,12 @@ QmImageAnalogClock::QmImageAnalogClock(QWidget *parent)
 	d->refreshTimer->start(1000);
 
 	d->dateTime = QDateTime::currentDateTime();
+
+	QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
+	pEffect->setOffset(5, 5);
+	pEffect->setBlurRadius(8);
+	pEffect->setColor(Qt::lightGray);
+	setGraphicsEffect(pEffect);
 }
 
 QmImageAnalogClock::~QmImageAnalogClock()
