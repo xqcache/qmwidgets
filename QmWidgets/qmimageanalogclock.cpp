@@ -57,10 +57,20 @@ void QmImageAnalogClock::setDialPixmap(const QPixmap& pixmap)
 	update();
 }
 
+QPixmap QmImageAnalogClock::dialPixmap() const
+{
+	return d->dialPixmap;
+}
+
 void QmImageAnalogClock::setHourHandPixmap(const QPixmap& pixmap)
 {
 	d->hourHandPixmap = pixmap;
 	update();
+}
+
+QPixmap QmImageAnalogClock::hourHandPixmap() const
+{
+	return d->hourHandPixmap;
 }
 
 void QmImageAnalogClock::setMinuteHandPixmap(const QPixmap& pixmap)
@@ -69,10 +79,20 @@ void QmImageAnalogClock::setMinuteHandPixmap(const QPixmap& pixmap)
 	update();
 }
 
+QPixmap QmImageAnalogClock::minuteHandPixmap() const
+{
+	return d->minuteHandPixmap;
+}
+
 void QmImageAnalogClock::setSecondHandPixmap(const QPixmap& pixmap)
 {
 	d->secondHandPixmap = pixmap;
 	update();
+}
+
+QPixmap QmImageAnalogClock::secondHandPixmap() const
+{
+	return d->secondHandPixmap;
 }
 
 void QmImageAnalogClock::setDateTime(const QDateTime& dateTime)
@@ -84,6 +104,39 @@ void QmImageAnalogClock::setDateTime(const QDateTime& dateTime)
 QDateTime QmImageAnalogClock::dateTime() const
 {
 	return d->dateTime;
+}
+
+void QmImageAnalogClock::setHourHandAngleOffset(double hourHandAngleOffset)
+{
+	d->hourHandAngleOffset = hourHandAngleOffset;
+	update();
+}
+
+double QmImageAnalogClock::hourHandAngleOffset()
+{
+	return d->hourHandAngleOffset;
+}
+
+void QmImageAnalogClock::setMinuteHandAngleOffset(double minuteHandAngleOffset)
+{
+	d->minuteHandAngleOffset = minuteHandAngleOffset;
+	update();
+}
+
+double QmImageAnalogClock::minuteHandAngleOffset()
+{
+	return d->minuteHandAngleOffset;
+}
+
+void QmImageAnalogClock::setSecondHandAngleOffset(double secondHandAngleOffset)
+{
+	d->secondHandAngleOffset = secondHandAngleOffset;
+	update();
+}
+
+double QmImageAnalogClock::secondHandAngleOffset()
+{
+	return d->secondHandAngleOffset;
 }
 
 void QmImageAnalogClock::paintEvent(QPaintEvent* event)

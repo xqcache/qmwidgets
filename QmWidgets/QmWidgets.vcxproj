@@ -88,20 +88,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)d</TargetName>
+    <TargetName>qmwidgetsd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)d</TargetName>
+    <TargetName>qmwidgetsd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>qmwidgets</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>qmwidgets</TargetName>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
