@@ -27,6 +27,11 @@
     <Filter Include="controls">
       <UniqueIdentifier>{f8190cec-d1b4-4c53-822f-e62480e330a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,6 +74,9 @@
       <Filter>controls</Filter>
     </ClCompile>
     <ClCompile Include="qmimageanalogclockplugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qmlogindialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,10 +128,21 @@
     <QtMoc Include="qmimageanalogclockplugin.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="qmlogindialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="icons.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="qmlogindialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

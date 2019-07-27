@@ -5,8 +5,13 @@
         <file>asserts/icons/analog_clock_minute_hand.png</file>
         <file>asserts/icons/analog_clock_second_hand.png</file>
         <file>asserts/icons/login_dialog_background.png</file>
-        <file>asserts/icons/login_dialog_remember_indicator_checked.jpg</file>
-        <file>asserts/icons/login_dialog_remember_indicator_unchecked.jpg</file>
         <file>asserts/fonts/century-gothic.ttf</file>
+        <file>asserts/icons/login_dialog_remember_indicator_checked.png</file>
+        <file>asserts/icons/login_dialog_remember_indicator_unchecked.png</file>
+        <file>asserts/icons/login_dialog_account_background.png</file>
+        <file>asserts/icons/login_dialog_password_background.png</file>
+        <file>asserts/icons/login_dialog_button_hover.png</file>
+        <file>asserts/icons/login_dialog_button_normal.png</file>
+        <file>asserts/icons/login_dialog_button_pressed.png</file>
     </qresource>
 </RCC>
