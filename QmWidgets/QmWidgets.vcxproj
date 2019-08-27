@@ -27,6 +27,7 @@
     <ClCompile Include="qmgaugecarplugin.cpp" />
     <ClCompile Include="qmimageanalogclock.cpp" />
     <ClCompile Include="qmimageanalogclockplugin.cpp" />
+    <ClCompile Include="qmlogindialog.cpp" />
     <ClCompile Include="qmswitch.cpp" />
     <ClCompile Include="qmswitchplugin.cpp" />
     <ClCompile Include="qmthermometer.cpp" />
@@ -50,6 +51,7 @@
     <QtMoc Include="qmcirclelightplugin.h" />
     <QtMoc Include="qmimageanalogclock.h" />
     <QtMoc Include="qmimageanalogclockplugin.h" />
+    <QtMoc Include="qmlogindialog.h" />
     <ClInclude Include="qmwidgets_global.h" />
     <QtMoc Include="qmgaugecarplugin.h" />
     <QtMoc Include="qmgaugecar.h" />
@@ -58,6 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="icons.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="qmlogindialog.ui" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6839BC80-5061-45A8-8E43-29966BC6AD70}</ProjectGuid>
@@ -88,20 +96,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)d</TargetName>
+    <TargetName>qmwidgetsd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>$(ProjectName)d</TargetName>
+    <TargetName>qmwidgetsd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>qmwidgets</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)\Out\Install\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\Out\Build\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>qmwidgets</TargetName>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -155,6 +165,10 @@
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -189,6 +203,10 @@
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -220,6 +238,10 @@
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -254,6 +276,10 @@
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
+    <QtUic>
+      <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
+    </QtUic>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

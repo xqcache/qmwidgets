@@ -31,7 +31,7 @@ QWidget* QmImageAnalogClockPlugin::createWidget(QWidget* parent)
 
 QString QmImageAnalogClockPlugin::name() const
 {
-	return QLatin1String("QmAnalogClock");
+	return QLatin1String("QmImageAnalogClock");
 }
 
 QString QmImageAnalogClockPlugin::group() const

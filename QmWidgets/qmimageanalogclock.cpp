@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QPainter>
 #include <QPixmap>
+#include <QGraphicsDropShadowEffect>
 
 
 class QmImageAnalogClockPrivate {
@@ -28,10 +29,10 @@ QmImageAnalogClock::QmImageAnalogClock(QWidget *parent)
 	: QFrame(parent), d(new QmImageAnalogClockPrivate)
 {
 
-	d->dialPixmap = QPixmap(":/icons/analog_clock_dial.png");
-	d->hourHandPixmap = QPixmap(":/icons/analog_clock_hour_hand.png");
-	d->minuteHandPixmap = QPixmap(":/icons/analog_clock_minute_hand.png");
-	d->secondHandPixmap = QPixmap(":/icons/analog_clock_second_hand.png");
+	d->dialPixmap = QPixmap(":/asserts/icons/analog_clock_dial.png");
+	d->hourHandPixmap = QPixmap(":/asserts/icons/analog_clock_hour_hand.png");
+	d->minuteHandPixmap = QPixmap(":/asserts/icons/analog_clock_minute_hand.png");
+	d->secondHandPixmap = QPixmap(":/asserts/icons/analog_clock_second_hand.png");
 
 	d->hourHandAngleOffset = 45;
 	d->minuteHandAngleOffset = -45;
@@ -44,6 +45,12 @@ QmImageAnalogClock::QmImageAnalogClock(QWidget *parent)
 	d->refreshTimer->start(1000);
 
 	d->dateTime = QDateTime::currentDateTime();
+
+	QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
+	pEffect->setOffset(5, 5);
+	pEffect->setBlurRadius(8);
+	pEffect->setColor(Qt::lightGray);
+	setGraphicsEffect(pEffect);
 }
 
 QmImageAnalogClock::~QmImageAnalogClock()
@@ -57,10 +64,20 @@ void QmImageAnalogClock::setDialPixmap(const QPixmap& pixmap)
 	update();
 }
 
+QPixmap QmImageAnalogClock::dialPixmap() const
+{
+	return d->dialPixmap;
+}
+
 void QmImageAnalogClock::setHourHandPixmap(const QPixmap& pixmap)
 {
 	d->hourHandPixmap = pixmap;
 	update();
+}
+
+QPixmap QmImageAnalogClock::hourHandPixmap() const
+{
+	return d->hourHandPixmap;
 }
 
 void QmImageAnalogClock::setMinuteHandPixmap(const QPixmap& pixmap)
@@ -69,10 +86,20 @@ void QmImageAnalogClock::setMinuteHandPixmap(const QPixmap& pixmap)
 	update();
 }
 
+QPixmap QmImageAnalogClock::minuteHandPixmap() const
+{
+	return d->minuteHandPixmap;
+}
+
 void QmImageAnalogClock::setSecondHandPixmap(const QPixmap& pixmap)
 {
 	d->secondHandPixmap = pixmap;
 	update();
+}
+
+QPixmap QmImageAnalogClock::secondHandPixmap() const
+{
+	return d->secondHandPixmap;
 }
 
 void QmImageAnalogClock::setDateTime(const QDateTime& dateTime)
@@ -84,6 +111,39 @@ void QmImageAnalogClock::setDateTime(const QDateTime& dateTime)
 QDateTime QmImageAnalogClock::dateTime() const
 {
 	return d->dateTime;
+}
+
+void QmImageAnalogClock::setHourHandAngleOffset(double hourHandAngleOffset)
+{
+	d->hourHandAngleOffset = hourHandAngleOffset;
+	update();
+}
+
+double QmImageAnalogClock::hourHandAngleOffset()
+{
+	return d->hourHandAngleOffset;
+}
+
+void QmImageAnalogClock::setMinuteHandAngleOffset(double minuteHandAngleOffset)
+{
+	d->minuteHandAngleOffset = minuteHandAngleOffset;
+	update();
+}
+
+double QmImageAnalogClock::minuteHandAngleOffset()
+{
+	return d->minuteHandAngleOffset;
+}
+
+void QmImageAnalogClock::setSecondHandAngleOffset(double secondHandAngleOffset)
+{
+	d->secondHandAngleOffset = secondHandAngleOffset;
+	update();
+}
+
+double QmImageAnalogClock::secondHandAngleOffset()
+{
+	return d->secondHandAngleOffset;
 }
 
 void QmImageAnalogClock::paintEvent(QPaintEvent* event)

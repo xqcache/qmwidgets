@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "mainwindow.h"
+#include "qmlogindialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 	//ui.widget->setInteractive(true);
+
+	QmLoginDialog* loginDialog = new QmLoginDialog();
+	loginDialog->exec();
 
 	//connect(ui.widget, &QmThermometer::valueChanged, this, &MainWindow::);
 }
