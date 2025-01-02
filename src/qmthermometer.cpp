@@ -38,7 +38,9 @@ QmThermometer::QmThermometer(QWidget* parent)
     : QFrame(parent)
     , d(new QmThermometerPrivate)
 {
-    setMinimumWidth(60);
+    setMinimumWidth(1.2
+        * qMax(fontMetrics().boundingRect(QString::number(d->maxValue)).width(),
+            fontMetrics().boundingRect(QString::number(d->minValue)).width()));
 
     d->bgColor = QColor(255, 255, 255);
     d->scaleColor = QColor(205, 58, 48);
@@ -57,14 +59,7 @@ QmThermometer::QmThermometer(QWidget* parent)
     d->suffix = QString("");
 
     setFocusPolicy(Qt::StrongFocus);
-
-    if (d->enable_shadow_) {
-        QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
-        pEffect->setOffset(5, 5);
-        pEffect->setBlurRadius(8);
-        pEffect->setColor(Qt::lightGray);
-        setGraphicsEffect(pEffect);
-    }
+    setShadowEnabled(d->enable_shadow_);
 }
 
 QmThermometer::~QmThermometer()
@@ -298,8 +293,8 @@ void QmThermometer::setShadowEnabled(bool enabled)
         }
     } else {
         setGraphicsEffect(nullptr);
-        effect->deleteLater();
     }
+    d->enable_shadow_ = enabled;
 }
 
 void QmThermometer::paintEvent(QPaintEvent* event)
@@ -311,13 +306,11 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     QRectF r = rect();
     QPointF c = r.center();
 
-    //// ���Ʊ���
     // p.save();
     // p.setBrush(d->bgColor);
     // p.drawRect(r);
     // p.restore();
 
-    // �����⻷
     p.save();
     qreal padding = 10;
 
@@ -335,14 +328,14 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     QPainterPath outerPath;
     qreal x = c.x() - outerTopDiameter / 2;
     QRectF outerTopRect = QRectF(x, padding, outerTopDiameter, outerTopDiameter);
-    QRectF outerBottomRect = QRectF(c.x() - outerBottomDiameter / 2, r.height() - padding - outerBottomDiameter, outerBottomDiameter, outerBottomDiameter);
+    QRectF outerBottomRect
+        = QRectF(c.x() - outerBottomDiameter / 2, r.height() - padding - outerBottomDiameter, outerBottomDiameter, outerBottomDiameter);
     outerPath.moveTo(x, padding + outerTopDiameter / 2);
     outerPath.arcTo(outerBottomRect, 120, 300);
     outerPath.arcTo(outerTopRect, 0, 180);
     p.drawPath(outerPath);
     p.restore();
 
-    // ���ơ�ֵ����
     p.save();
     p.setBrush(d->barColor);
     qreal innerBottomPadding = baseLength * 0.1;
@@ -353,9 +346,7 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     qreal barTop = padding + innerTopPadding + innerTopRect.height() / 2;
     qreal barBottom = innerBottomRect.top();
     qreal barLength = (d->maxValue - d->value) * ((barBottom - barTop) / (d->maxValue - d->minValue));
-    // ���ҳ���
     // qreal innerTopChordLen = qSin(qDegreesToRadians(22.5)) * innerBottomRect.width() / 2;
-    // ���ټ���
     qreal innerTopChordLen = 0.1913415 * innerBottomRect.width();
 
     innerPath.moveTo(c.x() - innerTopChordLen, barTop + barLength);
@@ -364,13 +355,11 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     p.drawPath(innerPath);
     p.restore();
 
-    // ������ֵ
     p.save();
     p.setPen(d->valueTextColor);
     p.drawText(innerBottomRect, Qt::AlignCenter, d->prefix + QString::number(d->value, 'f', d->decimals) + d->suffix);
     p.restore();
 
-    // �����Ҳ�̶���
     p.save();
     QPen majorScalePen(d->scaleColor);
     majorScalePen.setCapStyle(Qt::RoundCap);

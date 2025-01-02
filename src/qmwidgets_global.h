@@ -15,17 +15,18 @@
 extern int qInitResources_qmassets();
 extern int qCleanupResources_qmassets();
 
-struct QmWidgetResourceInitializer {
-    QmWidgetResourceInitializer()
-    {
-        qInitResources_qmassets();
-    }
-    ~QmWidgetResourceInitializer()
-    {
-        qCleanupResources_qmassets();
-    }
-};
-
-#define QMWIDGETS_INITIALIZE_RESOURCE \
-    QmWidgetResourceInitializer __g_qmwidgets_resource_initializer__;
+inline void __qmwidgets_resource_lazy_load()
+{
+    static struct QmWidgetResourceInitializer {
+        QmWidgetResourceInitializer()
+        {
+            qInitResources_qmassets();
+        }
+        ~QmWidgetResourceInitializer()
+        {
+            qCleanupResources_qmassets();
+        }
+    } __qmwidgets_resource_initializer;
+}
+#define QMWIDGETS_INITIALIZE_RESOURCE __qmwidgets_resource_lazy_load();
 #endif

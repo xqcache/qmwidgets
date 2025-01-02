@@ -7,14 +7,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_SHARED_LIBS "" ON)
 option(BUILD_TESTS "" OFF)
-option(BUILD_DESIGNER_PLUGIN "" ON)
+option(BUILD_DESIGNER_PLUGIN "" OFF)
 
 if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-add_subdirectory(src)
-
 if(BUILD_TESTS)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     add_subdirectory(tests)
 endif()
+
+add_subdirectory(src)

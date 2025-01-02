@@ -21,4 +21,3 @@ target_link_libraries(${TARGET_NAME} PRIVATE
     qmwidgets
 )
 target_precompile_headers(${TARGET_NAME} PUBLIC "stdafx.h")
-target_compile_definitions(${TARGET_NAME} PUBLIC BUILD_STATIC)
