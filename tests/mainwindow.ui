@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindowClass</class>
+ <widget class="QWidget" name="MainWindowClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1010</width>
+    <height>838</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QmThermometer" name="widget_3">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>241</width>
+     <height>820</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Raised</enum>
+   </property>
+  </widget>
+  <widget class="QmSwitch" name="qmSwitch">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>80</y>
+     <width>60</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QmGaugeCar" name="qmGaugeCar">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>50</y>
+     <width>100</width>
+     <height>100</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QmAnalogClock" name="qmAnalogClock">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>50</y>
+     <width>100</width>
+     <height>100</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QmCircleLight" name="qmCircleLight">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>230</y>
+     <width>100</width>
+     <height>100</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QmImageAnalogClock" name="qmImageAnalogClock">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>270</y>
+     <width>321</width>
+     <height>251</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QmGaugeCar</class>
+   <extends>QFrame</extends>
+   <header>qmgaugecar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QmSwitch</class>
+   <extends>QFrame</extends>
+   <header>qmswitch.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QmThermometer</class>
+   <extends>QFrame</extends>
+   <header>qmthermometer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QmAnalogClock</class>
+   <extends>QFrame</extends>
+   <header>qmanalogclock.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QmCircleLight</class>
+   <extends>QFrame</extends>
+   <header>qmcirclelight.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QmImageAnalogClock</class>
+   <extends>QFrame</extends>
+   <header>qmimageanalogclock.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

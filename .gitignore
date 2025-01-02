@@ -1,6 +1,4 @@
-.vs
-Out
-QmWidgets/GeneratedFiles
-QmWidgetsTest/GeneratedFiles
-
-
+**/.vs
+**/build
+**/build-
+**/.cache

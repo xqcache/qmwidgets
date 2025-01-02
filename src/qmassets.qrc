@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/icons/analog_clock_dial.png</file>
+        <file>assets/icons/analog_clock_hour_hand.png</file>
+        <file>assets/icons/analog_clock_minute_hand.png</file>
+        <file>assets/icons/analog_clock_second_hand.png</file>
+        <file>assets/icons/login_dialog_background.png</file>
+        <file>assets/fonts/century-gothic.ttf</file>
+        <file>assets/icons/login_dialog_remember_indicator_checked.png</file>
+        <file>assets/icons/login_dialog_remember_indicator_unchecked.png</file>
+        <file>assets/icons/login_dialog_account_background.png</file>
+        <file>assets/icons/login_dialog_password_background.png</file>
+        <file>assets/icons/login_dialog_button_hover.png</file>
+        <file>assets/icons/login_dialog_button_normal.png</file>
+        <file>assets/icons/login_dialog_button_pressed.png</file>
+    </qresource>
+</RCC>
