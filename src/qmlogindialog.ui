@@ -51,7 +51,7 @@
      </property>
      <property name="styleSheet">
       <string notr="true">#mainFrame {
-	border-image: url(:/assets/icons/login_dialog_background.png);
+	border-image: url(:/qmwidgets/assets/icons/login_dialog_background.png);
 }</string>
      </property>
      <property name="frameShape">
@@ -82,7 +82,7 @@
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/assets/icons/login_dialog_account_background.png);
+       <string notr="true">border-image: url(:/qmwidgets/assets/icons/login_dialog_account_background.png);
 padding-left: 12px;
 font: 10pt &quot;Century Gothic&quot;;</string>
       </property>
@@ -103,7 +103,7 @@ font: 10pt &quot;Century Gothic&quot;;</string>
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/assets/icons/login_dialog_password_background.png);
+       <string notr="true">border-image: url(:/qmwidgets/assets/icons/login_dialog_password_background.png);
 padding-left: 12px;
 font: 10pt &quot;Century Gothic&quot;;</string>
       </property>
@@ -147,14 +147,14 @@ font: 10pt &quot;Century Gothic&quot;;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton {
-	border-image: url(:/assets/icons/login_dialog_button_normal.png);
+	border-image: url(:/qmwidgets/assets/icons/login_dialog_button_normal.png);
 	font: 9pt &quot;Century Gothic&quot;;
 }
 QPushButton:hover {
-	border-image: url(:/assets/icons/login_dialog_button_hover.png);
+	border-image: url(:/qmwidgets/assets/icons/login_dialog_button_hover.png);
 }
 QPushButton:pressed {
-	border-image: url(:/assets/icons/login_dialog_button_pressed.png);
+	border-image: url(:/qmwidgets/assets/icons/login_dialog_button_pressed.png);
 }</string>
       </property>
       <property name="text">

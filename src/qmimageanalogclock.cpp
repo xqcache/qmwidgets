@@ -29,10 +29,10 @@ QmImageAnalogClock::QmImageAnalogClock(QWidget* parent)
     , d(new QmImageAnalogClockPrivate)
 {
 
-    d->dialPixmap = QPixmap(":/assets/icons/analog_clock_dial.png");
-    d->hourHandPixmap = QPixmap(":/assets/icons/analog_clock_hour_hand.png");
-    d->minuteHandPixmap = QPixmap(":/assets/icons/analog_clock_minute_hand.png");
-    d->secondHandPixmap = QPixmap(":/assets/icons/analog_clock_second_hand.png");
+    d->dialPixmap = QPixmap(":/qmwidgets/assets/icons/analog_clock_dial.png");
+    d->hourHandPixmap = QPixmap(":/qmwidgets/assets/icons/analog_clock_hour_hand.png");
+    d->minuteHandPixmap = QPixmap(":/qmwidgets/assets/icons/analog_clock_minute_hand.png");
+    d->secondHandPixmap = QPixmap(":/qmwidgets/assets/icons/analog_clock_second_hand.png");
 
     d->hourHandAngleOffset = 45;
     d->minuteHandAngleOffset = -45;

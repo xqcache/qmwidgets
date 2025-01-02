@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/qmwidgets/">
         <file>assets/icons/analog_clock_dial.png</file>
         <file>assets/icons/analog_clock_hour_hand.png</file>
         <file>assets/icons/analog_clock_minute_hand.png</file>
