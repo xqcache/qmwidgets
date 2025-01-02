@@ -20,6 +20,7 @@ class QMWIDGETS_EXPORT QmThermometer : public QFrame {
     Q_PROPERTY(QColor barColor READ barColor WRITE setBarColor)
     Q_PROPERTY(QColor scaleColor READ scaleColor WRITE setScaleColor)
     Q_PROPERTY(QColor valueTextColor READ valueTextColor WRITE setValueTextColor)
+    Q_PROPERTY(bool enableShadow READ isShadowEnabled WRITE setShadowEnabled)
 
 public:
     QmThermometer(QWidget* parent);
@@ -66,6 +67,9 @@ public:
     double singleStep();
 
     void setInteractive(bool yes);
+
+    bool isShadowEnabled() const;
+    void setShadowEnabled(bool enabled);
 
 Q_SIGNALS:
     void valueChanged(double value);

@@ -29,6 +29,8 @@ private:
     QString suffix;
     int decimals;
 
+    bool enable_shadow_ { false };
+
     friend class QmThermometer;
 };
 
@@ -56,12 +58,13 @@ QmThermometer::QmThermometer(QWidget* parent)
 
     setFocusPolicy(Qt::StrongFocus);
 
-    // ������ӰЧ��
-    QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
-    pEffect->setOffset(5, 5);
-    pEffect->setBlurRadius(8);
-    pEffect->setColor(Qt::lightGray);
-    setGraphicsEffect(pEffect);
+    if (d->enable_shadow_) {
+        QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
+        pEffect->setOffset(5, 5);
+        pEffect->setBlurRadius(8);
+        pEffect->setColor(Qt::lightGray);
+        setGraphicsEffect(pEffect);
+    }
 }
 
 QmThermometer::~QmThermometer()
@@ -273,6 +276,29 @@ void QmThermometer::keyPressEvent(QKeyEvent* event)
         }
     } else {
         QWidget::keyPressEvent(event);
+    }
+}
+
+bool QmThermometer::isShadowEnabled() const
+{
+    return d->enable_shadow_;
+}
+
+void QmThermometer::setShadowEnabled(bool enabled)
+{
+    auto* effect = graphicsEffect();
+
+    if (enabled) {
+        if (!effect) {
+            QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
+            pEffect->setOffset(5, 5);
+            pEffect->setBlurRadius(8);
+            pEffect->setColor(Qt::lightGray);
+            setGraphicsEffect(pEffect);
+        }
+    } else {
+        setGraphicsEffect(nullptr);
+        effect->deleteLater();
     }
 }
 
