@@ -38,9 +38,8 @@ QmThermometer::QmThermometer(QWidget* parent)
     : QFrame(parent)
     , d(new QmThermometerPrivate)
 {
-    setMinimumWidth(1.2
-        * qMax(fontMetrics().boundingRect(QString::number(d->maxValue)).width(),
-            fontMetrics().boundingRect(QString::number(d->minValue)).width()));
+    setMinimumWidth(qMax(fontMetrics().boundingRect(QString::number(d->maxValue)).width(),
+        fontMetrics().boundingRect(QString::number(d->minValue)).width()));
 
     d->bgColor = QColor(255, 255, 255);
     d->scaleColor = QColor(205, 58, 48);
@@ -297,6 +296,19 @@ void QmThermometer::setShadowEnabled(bool enabled)
     d->enable_shadow_ = enabled;
 }
 
+QSize QmThermometer::sizeHint() const
+{
+    return minimumSizeHint();
+}
+
+QSize QmThermometer::minimumSizeHint() const
+{
+    QSize min_val_size = fontMetrics().boundingRect(QString::number(d->minValue)).size();
+    QSize max_val_size = fontMetrics().boundingRect(QString::number(d->maxValue)).size();
+
+    return QSize(qMax(min_val_size.width(), max_val_size.width()), qMax(min_val_size.height(), max_val_size.height()));
+}
+
 void QmThermometer::paintEvent(QPaintEvent* event)
 {
     QPainter p(this);
@@ -314,7 +326,7 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     p.save();
     qreal padding = 10;
 
-    qreal baseLength = (MIN(r.width(), r.height()) - 2 * padding) * 0.8;
+    qreal baseLength = (MIN(r.width(), r.height()) - 2 * padding) * 0.7;
     qreal outerBottomDiameter = baseLength;
     qreal outerTopDiameter = outerBottomDiameter / 2;
 

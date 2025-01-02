@@ -71,6 +71,9 @@ public:
     bool isShadowEnabled() const;
     void setShadowEnabled(bool enabled);
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
 Q_SIGNALS:
     void valueChanged(double value);
 
