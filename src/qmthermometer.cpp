@@ -167,7 +167,6 @@ int QmThermometer::minorScaleCount()
 
 void QmThermometer::setValue(double value)
 {
-    // ���ֵ�ı�
     if (!qFuzzyIsNull(d->value - value)) {
         if (value > d->maxValue) {
             d->value = d->maxValue;
@@ -375,15 +374,15 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     p.save();
     QPen majorScalePen(d->scaleColor);
     majorScalePen.setCapStyle(Qt::RoundCap);
-    majorScalePen.setWidthF(baseLength * 0.025);
+    majorScalePen.setWidthF(baseLength * 0.05);
 
     QPen minorScalePen(majorScalePen);
-    minorScalePen.setWidthF(baseLength * 0.015);
+    minorScalePen.setWidthF(baseLength * 0.03);
 
     qreal majorScaleDelta = (barBottom - barTop) / d->majorScaleCount;
     qreal minorScaleDelta = majorScaleDelta / d->minorScaleCount;
-    qreal majorScaleLen = baseLength * 0.2;
-    qreal minorScaleLen = baseLength * 0.13;
+    qreal majorScaleLen = baseLength * 0.25;
+    qreal minorScaleLen = baseLength * 0.15;
     qreal scaleLeft = outerTopRect.right() + baseLength * 0.15;
     QLineF baseMajorScaleLine = QLineF(scaleLeft, barTop, scaleLeft + majorScaleLen, barTop);
     QLineF baseMinorScaleLine = QLineF(scaleLeft, barTop, scaleLeft + minorScaleLen, barTop);

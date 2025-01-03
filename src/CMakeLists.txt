@@ -38,6 +38,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmswitch.cpp
     qmthermometer.h
     qmthermometer.cpp
+    qmcirclestatus.h
+    qmcirclestatus.cpp
 )
 
 if(BUILD_DESIGNER_PLUGIN)
