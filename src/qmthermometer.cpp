@@ -38,8 +38,7 @@ QmThermometer::QmThermometer(QWidget* parent)
     : QFrame(parent)
     , d(new QmThermometerPrivate)
 {
-    setMinimumWidth(qMax(fontMetrics().boundingRect(QString::number(d->maxValue)).width(),
-        fontMetrics().boundingRect(QString::number(d->minValue)).width()));
+    setMinimumSize(minimumSizeHint());
 
     d->bgColor = QColor(255, 255, 255);
     d->scaleColor = QColor(205, 58, 48);
@@ -195,7 +194,7 @@ void QmThermometer::setMaxValue(double maxValue)
     if (d->value > d->maxValue) {
         d->value = d->maxValue;
     }
-
+    setMinimumSize(minimumSizeHint());
     update();
 }
 
@@ -213,6 +212,7 @@ void QmThermometer::setMinValue(double minValue)
     if (d->value < d->minValue) {
         d->value = d->minValue;
     }
+    setMinimumSize(minimumSizeHint());
     update();
 }
 
@@ -305,7 +305,7 @@ QSize QmThermometer::minimumSizeHint() const
     QSize min_val_size = fontMetrics().boundingRect(QString::number(d->minValue)).size();
     QSize max_val_size = fontMetrics().boundingRect(QString::number(d->maxValue)).size();
 
-    return QSize(qMax(min_val_size.width(), max_val_size.width()), qMax(min_val_size.height(), max_val_size.height()));
+    return QSize(qMax(min_val_size.width(), max_val_size.width()) + 5, qMax(min_val_size.height(), max_val_size.height()) + 5);
 }
 
 void QmThermometer::paintEvent(QPaintEvent* event)
@@ -323,9 +323,9 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     // p.restore();
 
     p.save();
-    qreal padding = 10;
+    qreal padding = 5;
 
-    qreal baseLength = (MIN(r.width(), r.height()) - 2 * padding) * 0.7;
+    qreal baseLength = (MIN(r.width(), r.height()) - 2 * padding) * 0.55;
     qreal outerBottomDiameter = baseLength;
     qreal outerTopDiameter = outerBottomDiameter / 2;
 
