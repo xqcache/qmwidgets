@@ -71,9 +71,6 @@ public:
     bool isShadowEnabled() const;
     void setShadowEnabled(bool enabled);
 
-    QSize sizeHint() const override;
-    QSize minimumSizeHint() const override;
-
 Q_SIGNALS:
     void valueChanged(double value);
 
@@ -81,9 +78,9 @@ public Q_SLOTS:
     void setValue(double value);
 
 protected:
-    void paintEvent(QPaintEvent* event);
-    void wheelEvent(QWheelEvent* event);
-    void keyPressEvent(QKeyEvent* event);
+    void paintEvent(QPaintEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
     // void mousePressEvent(QMouseEvent *event);
 
 private:

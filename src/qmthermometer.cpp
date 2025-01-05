@@ -38,7 +38,6 @@ QmThermometer::QmThermometer(QWidget* parent)
     : QFrame(parent)
     , d(new QmThermometerPrivate)
 {
-    setMinimumSize(minimumSizeHint());
 
     d->bgColor = QColor(255, 255, 255);
     d->scaleColor = QColor(205, 58, 48);
@@ -58,6 +57,7 @@ QmThermometer::QmThermometer(QWidget* parent)
 
     setFocusPolicy(Qt::StrongFocus);
     setShadowEnabled(d->enable_shadow_);
+    setMinimumSize(80, 140);
 }
 
 QmThermometer::~QmThermometer()
@@ -194,7 +194,6 @@ void QmThermometer::setMaxValue(double maxValue)
     if (d->value > d->maxValue) {
         d->value = d->maxValue;
     }
-    setMinimumSize(minimumSizeHint());
     update();
 }
 
@@ -212,7 +211,6 @@ void QmThermometer::setMinValue(double minValue)
     if (d->value < d->minValue) {
         d->value = d->minValue;
     }
-    setMinimumSize(minimumSizeHint());
     update();
 }
 
@@ -293,19 +291,6 @@ void QmThermometer::setShadowEnabled(bool enabled)
         setGraphicsEffect(nullptr);
     }
     d->enable_shadow_ = enabled;
-}
-
-QSize QmThermometer::sizeHint() const
-{
-    return minimumSizeHint();
-}
-
-QSize QmThermometer::minimumSizeHint() const
-{
-    QSize min_val_size = fontMetrics().boundingRect(QString::number(d->minValue)).size();
-    QSize max_val_size = fontMetrics().boundingRect(QString::number(d->maxValue)).size();
-
-    return QSize(qMax(min_val_size.width(), max_val_size.width()) + 5, qMax(min_val_size.height(), max_val_size.height()) + 5);
 }
 
 void QmThermometer::paintEvent(QPaintEvent* event)
