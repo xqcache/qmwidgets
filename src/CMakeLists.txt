@@ -44,6 +44,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmframelesswindow.cpp
     qmcrossbutton.h
     qmcrossbutton.cpp
+    qmgradientseparator.h
+    qmgradientseparator.cpp
 )
 
 if(BUILD_DESIGNER_PLUGIN)
