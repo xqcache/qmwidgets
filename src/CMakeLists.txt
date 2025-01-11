@@ -42,6 +42,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmcirclestatus.cpp
     qmframelesswindow.h
     qmframelesswindow.cpp
+    qmcrossbutton.h
+    qmcrossbutton.cpp
 )
 
 if(BUILD_DESIGNER_PLUGIN)

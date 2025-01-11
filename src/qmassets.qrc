@@ -13,5 +13,20 @@
         <file>assets/icons/login_dialog_button_hover.png</file>
         <file>assets/icons/login_dialog_button_normal.png</file>
         <file>assets/icons/login_dialog_button_pressed.png</file>
+
+        <file>assets/icons/cross_button_4d_normal.png</file>
+        <file>assets/icons/cross_button_4d_east_clicked.png</file>
+        <file>assets/icons/cross_button_4d_south_clicked.png</file>
+        <file>assets/icons/cross_button_4d_west_clicked.png</file>
+        <file>assets/icons/cross_button_4d_north_clicked.png</file>
+
+        <file>assets/icons/cross_button_sn_normal.png</file>
+        <file>assets/icons/cross_button_sn_north_clicked.png</file>
+        <file>assets/icons/cross_button_sn_south_clicked.png</file>
+
+        <file>assets/icons/cross_button_ew_normal.png</file>
+        <file>assets/icons/cross_button_ew_west_clicked.png</file>
+        <file>assets/icons/cross_button_ew_east_clicked.png</file>
+
     </qresource>
 </RCC>
