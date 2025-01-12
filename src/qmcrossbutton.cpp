@@ -13,7 +13,7 @@ public:
     QmCrossButtonPrivate(QmCrossButton* parent);
 
     void switchPixmap(const QPointF& pos);
-    void switchPixmap(const std::optional<QmCrossButton::ClickedArea>& clicked_area);
+    void switchPixmap(QmCrossButton::ClickedArea clicked_area);
     void setNormal();
 
     inline QmCrossButton::DivisionMode divisionMode() const
@@ -23,22 +23,20 @@ public:
 
 private:
     QRectF buttonRect();
-    std::optional<QmCrossButton::ClickedArea> clickedArea(const QPointF& pos);
+    QmCrossButton::ClickedArea clickedArea(const QPointF& pos);
 
 private:
     Q_DECLARE_PUBLIC(QmCrossButton);
     QmCrossButton* q_ptr = nullptr;
 
     static constexpr int kBorderSpacing = 0;
-    static constexpr int kPixmapSpacing = 10;
-    std::array<QPixmap, 4> clicked_pixmaps_;
-    QPixmap normal_pixmap_;
+    std::array<QPixmap, 5> pixmaps_;
     DivisionMode division_mode_ { DivisionMode::FourDirections };
 
-    QMargins pressed_margins_;
     bool pressed_ { false };
 
     QPixmap* curr_pixmap_ { nullptr };
+    QmCrossButton::ClickedArea curr_area_ { QmCrossButton::ClickedArea::None };
     static std::map<QmCrossButton::ClickedArea, std::pair<float, float>> sFourDirectionsAngles;
     static std::map<QmCrossButton::ClickedArea, std::pair<float, float>> sEastWestAngles;
     static std::map<QmCrossButton::ClickedArea, std::pair<float, float>> sSouthNorthAngles;
@@ -60,30 +58,14 @@ std::map<QmCrossButton::ClickedArea, std::pair<float, float>> QmCrossButtonPriva
 QmCrossButtonPrivate::QmCrossButtonPrivate(QmCrossButton* parent)
     : q_ptr(parent)
 {
-    normal_pixmap_.load(":/qmwidgets/assets/icons/cross_button_4d_normal.png");
-    clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::East)].load(
-        ":/qmwidgets/assets/icons/cross_button_4d_east_clicked.png");
-    clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::South)].load(
-        ":/qmwidgets/assets/icons/cross_button_4d_south_clicked.png");
-    clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::West)].load(
-        ":/qmwidgets/assets/icons/cross_button_4d_west_clicked.png");
-    clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::North)].load(
-        ":/qmwidgets/assets/icons/cross_button_4d_north_clicked.png");
+    pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)].load(":/qmwidgets/assets/icons/cross_button_4d_normal.png");
+    pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::East)].load(":/qmwidgets/assets/icons/cross_button_4d_east_clicked.png");
+    pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::South)].load(":/qmwidgets/assets/icons/cross_button_4d_south_clicked.png");
+    pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::West)].load(":/qmwidgets/assets/icons/cross_button_4d_west_clicked.png");
+    pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::North)].load(":/qmwidgets/assets/icons/cross_button_4d_north_clicked.png");
 
-    // normal_pixmap_.load(":/qmwidgets/assets/icons/cross_button_ew_normal.png");
-    // clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::East)].load(
-    //     ":/qmwidgets/assets/icons/cross_button_ew_east_clicked.png");
-    // clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::West)].load(
-    //     ":/qmwidgets/assets/icons/cross_button_ew_west_clicked.png");
-
-    // normal_pixmap_.load(":/qmwidgets/assets/icons/cross_button_sn_normal.png");
-    // clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::South)].load(
-    //     ":/qmwidgets/assets/icons/cross_button_sn_south_clicked.png");
-    // clicked_pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::North)].load(
-    //     ":/qmwidgets/assets/icons/cross_button_sn_north_clicked.png");
-
-    curr_pixmap_ = &normal_pixmap_;
-    pressed_margins_ = { 1, 1, 1, 1 };
+    curr_area_ = QmCrossButton::ClickedArea::None;
+    curr_pixmap_ = &pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)];
 }
 
 QRectF QmCrossButtonPrivate::buttonRect()
@@ -92,11 +74,10 @@ QRectF QmCrossButtonPrivate::buttonRect()
     int min_dimen = qMin(q->width(), q->height());
     QRectF result(0, 0, min_dimen, min_dimen);
     result.moveCenter(q->rect().center());
-    constexpr int spacing = kBorderSpacing + kPixmapSpacing;
-    return result.marginsRemoved(QMarginsF(spacing, spacing, spacing, spacing));
+    return result.marginsRemoved(QMarginsF(kBorderSpacing, kBorderSpacing, kBorderSpacing, kBorderSpacing));
 }
 
-std::optional<QmCrossButton::ClickedArea> QmCrossButtonPrivate::clickedArea(const QPointF& pos)
+QmCrossButton::ClickedArea QmCrossButtonPrivate::clickedArea(const QPointF& pos)
 {
     QRectF body_rect = buttonRect();
     QPointF center = body_rect.center();
@@ -121,7 +102,7 @@ std::optional<QmCrossButton::ClickedArea> QmCrossButtonPrivate::clickedArea(cons
             return area;
         }
     }
-    return std::nullopt;
+    return QmCrossButton::ClickedArea::None;
 }
 
 void QmCrossButtonPrivate::switchPixmap(const QPointF& pos)
@@ -130,18 +111,15 @@ void QmCrossButtonPrivate::switchPixmap(const QPointF& pos)
     switchPixmap(clicked_area);
 }
 
-void QmCrossButtonPrivate::switchPixmap(const std::optional<QmCrossButton::ClickedArea>& clicked_area)
+void QmCrossButtonPrivate::switchPixmap(QmCrossButton::ClickedArea clicked_area)
 {
-    if (clicked_area.has_value()) {
-        curr_pixmap_ = &clicked_pixmaps_[static_cast<size_t>(clicked_area.value())];
-    } else {
-        curr_pixmap_ = &normal_pixmap_;
-    }
+    curr_area_ = clicked_area;
+    curr_pixmap_ = &pixmaps_[static_cast<size_t>(curr_area_)];
 }
 
 void QmCrossButtonPrivate::setNormal()
 {
-    curr_pixmap_ = &normal_pixmap_;
+    curr_pixmap_ = &pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)];
 }
 
 ///////////////////////
@@ -172,35 +150,35 @@ QmCrossButton::DivisionMode QmCrossButton::divisionMode() const
 
 void QmCrossButton::setNormalPixmap(const QPixmap& pixmap)
 {
-    d_->normal_pixmap_ = pixmap;
+    d_->pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)] = pixmap;
 }
 
 void QmCrossButton::setEastClickedPixmap(const QPixmap& pixmap)
 {
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::East)] = pixmap;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::East)] = pixmap;
 }
 
 void QmCrossButton::setSouthClickedPixmap(const QPixmap& pixmap)
 {
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::South)] = pixmap;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::South)] = pixmap;
 }
 
 void QmCrossButton::setWestClickedPixmap(const QPixmap& pixmap)
 {
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::West)] = pixmap;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::West)] = pixmap;
 }
 
 void QmCrossButton::setNorthClickedPixmap(const QPixmap& pixmap)
 {
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::North)] = pixmap;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::North)] = pixmap;
 }
 
 void QmCrossButton::setClickedPixmap(const QPixmap& east, const QPixmap& south, const QPixmap& west, const QPixmap& north)
 {
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::East)] = east;
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::South)] = south;
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::West)] = west;
-    d_->clicked_pixmaps_[static_cast<size_t>(ClickedArea::North)] = north;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::East)] = east;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::South)] = south;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::West)] = west;
+    d_->pixmaps_[static_cast<size_t>(ClickedArea::North)] = north;
 }
 
 QSize QmCrossButton::sizeHint() const
@@ -221,10 +199,10 @@ void QmCrossButton::click(ClickedArea area)
 void QmCrossButton::mousePressEvent(QMouseEvent* event)
 {
     auto clicked_area = d_->clickedArea(event->pos());
-    if (clicked_area.has_value()) {
-        emit clicked(clicked_area.value());
+    if (clicked_area != ClickedArea::None) {
+        d_->pressed_ = true;
+        emit clicked(clicked_area);
     }
-    d_->pressed_ = true;
     update();
 }
 
@@ -252,7 +230,22 @@ void QmCrossButton::paintEvent(QPaintEvent* event)
         QPainter painter(this);
         QRect pixmap_rect = d_->buttonRect().toRect();
         if (d_->pressed_) {
-            pixmap_rect = pixmap_rect.marginsRemoved(d_->pressed_margins_);
+            switch (d_->curr_area_) {
+            case ClickedArea::East:
+                pixmap_rect.setRight(pixmap_rect.right() - 1);
+                break;
+            case ClickedArea::South:
+                pixmap_rect.setBottom(pixmap_rect.bottom() - 1);
+                break;
+            case ClickedArea::West:
+                pixmap_rect.setLeft(pixmap_rect.left() + 1);
+                break;
+            case ClickedArea::North:
+                pixmap_rect.setTop(pixmap_rect.top() + 1);
+                break;
+            default:
+                break;
+            }
         }
         painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
         painter.drawPixmap(pixmap_rect, *d_->curr_pixmap_);

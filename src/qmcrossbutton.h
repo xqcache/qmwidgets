@@ -8,6 +8,7 @@ class QMWIDGETS_EXPORT QmCrossButton : public QFrame {
     Q_OBJECT
 public:
     enum class ClickedArea : unsigned char {
+        None,
         East,
         South,
         West,
