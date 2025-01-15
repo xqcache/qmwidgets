@@ -46,6 +46,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmcrossbutton.cpp
     qmgradientseparator.h
     qmgradientseparator.cpp
+    qmautoreturnslider.h
+    qmautoreturnslider.cpp
 )
 
 if(BUILD_DESIGNER_PLUGIN)
