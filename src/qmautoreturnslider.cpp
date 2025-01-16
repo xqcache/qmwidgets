@@ -44,6 +44,26 @@ void QmAutoReturnSlider::keyPressEvent(QKeyEvent* event)
     event->ignore();
 }
 
+void QmAutoReturnSlider::mouseMoveEvent(QMouseEvent* event)
+{
+    QSignalBlocker blocker(this);
+    QSlider::mouseMoveEvent(event);
+}
+
+void QmAutoReturnSlider::mouseReleaseEvent(QMouseEvent* event)
+{
+    emit valueChanged(value());
+    QSlider::mouseReleaseEvent(event);
+}
+
+void QmAutoReturnSlider::mousePressEvent(QMouseEvent* event)
+{
+    {
+        QSignalBlocker blocker(this);
+        QSlider::mousePressEvent(event);
+    }
+}
+
 void QmAutoReturnSlider::onSliderReleased()
 {
     if (d_->animated_) {

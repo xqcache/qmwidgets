@@ -16,6 +16,9 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
 
 private slots:
     void onSliderReleased();
