@@ -42,6 +42,9 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+    void setRepeatUtil(int ms);
+    void setRepeatInterval(int ms);
+
 signals:
     void clicked(ClickedArea area);
 

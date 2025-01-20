@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPolygonF>
+#include <QTimer>
 #include <optional>
 
 class QmCrossButtonPrivate {
@@ -28,6 +29,10 @@ private:
 private:
     Q_DECLARE_PUBLIC(QmCrossButton);
     QmCrossButton* q_ptr = nullptr;
+
+    int repeat_util_ { 0 };
+    int repeat_interval_ { 500 };
+    QTimer* repeat_timer_ { nullptr };
 
     static constexpr int kBorderSpacing = 0;
     std::array<QPixmap, 5> pixmaps_;
@@ -63,7 +68,7 @@ QmCrossButtonPrivate::QmCrossButtonPrivate(QmCrossButton* parent)
     pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::South)].load(":/qmwidgets/assets/icons/cross_button_4d_south_clicked.png");
     pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::West)].load(":/qmwidgets/assets/icons/cross_button_4d_west_clicked.png");
     pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::North)].load(":/qmwidgets/assets/icons/cross_button_4d_north_clicked.png");
-
+    repeat_timer_ = new QTimer(parent);
     curr_area_ = QmCrossButton::ClickedArea::None;
     curr_pixmap_ = &pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)];
 }
@@ -203,11 +208,24 @@ void QmCrossButton::mousePressEvent(QMouseEvent* event)
         d_->pressed_ = true;
         emit clicked(clicked_area);
     }
+    if (d_->repeat_timer_->isActive()) {
+        d_->repeat_timer_->stop();
+    }
+    if (d_->repeat_util_ > 0) {
+        QTimer::singleShot(d_->repeat_util_, this, [this] {
+            if (d_->pressed_) {
+                d_->repeat_timer_->start();
+            }
+        });
+    }
+
     update();
 }
 
 void QmCrossButton::mouseReleaseEvent(QMouseEvent* event)
 {
+    d_->repeat_timer_->stop();
+
     d_->pressed_ = false;
     update();
 }
@@ -222,6 +240,7 @@ void QmCrossButton::leaveEvent(QEvent* event)
 {
     d_->setNormal();
     update();
+    d_->repeat_timer_->stop();
 }
 
 void QmCrossButton::paintEvent(QPaintEvent* event)
@@ -250,4 +269,19 @@ void QmCrossButton::paintEvent(QPaintEvent* event)
         painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
         painter.drawPixmap(pixmap_rect, *d_->curr_pixmap_);
     }
+}
+
+void QmCrossButton::setRepeatUtil(int ms)
+{
+    if (ms > 0) {
+        connect(d_->repeat_timer_, &QTimer::timeout, this, [this] { emit clicked(d_->curr_area_); });
+    } else {
+        d_->repeat_timer_->disconnect(this);
+    }
+    d_->repeat_util_ = ms;
+}
+
+void QmCrossButton::setRepeatInterval(int ms)
+{
+    d_->repeat_timer_->setInterval(ms);
 }
