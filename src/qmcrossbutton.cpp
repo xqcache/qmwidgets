@@ -38,6 +38,8 @@ private:
     std::array<QPixmap, 5> pixmaps_;
     DivisionMode division_mode_ { DivisionMode::FourDirections };
 
+    QPainterPath ignored_area_;
+
     bool pressed_ { false };
 
     QPixmap* curr_pixmap_ { nullptr };
@@ -86,6 +88,24 @@ QmCrossButton::ClickedArea QmCrossButtonPrivate::clickedArea(const QPointF& pos)
 {
     QRectF body_rect = buttonRect();
     QPointF center = body_rect.center();
+
+    if (!ignored_area_.isEmpty()) {
+
+        qreal pixmap_dimen = qMin(curr_pixmap_->width(), curr_pixmap_->height());
+        qreal body_dimen = qMin(body_rect.width(), body_rect.height());
+        qreal ratio = body_dimen / pixmap_dimen;
+
+        QTransform matrix;
+        matrix.translate(body_rect.left(), body_rect.top());
+        matrix.scale(ratio, ratio);
+
+        auto ignored_polys = ignored_area_.toFillPolygons(matrix);
+        for (const auto& poly : ignored_polys) {
+            if (poly.containsPoint(pos, Qt::FillRule::OddEvenFill)) {
+                return QmCrossButton::ClickedArea::None;
+            }
+        }
+    }
 
     std::map<QmCrossButton::ClickedArea, std::pair<float, float>> area_angles;
     switch (division_mode_) {
@@ -156,6 +176,7 @@ QmCrossButton::DivisionMode QmCrossButton::divisionMode() const
 void QmCrossButton::setNormalPixmap(const QPixmap& pixmap)
 {
     d_->pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)] = pixmap;
+    // setFixedSize(pixmap.size());
 }
 
 void QmCrossButton::setEastClickedPixmap(const QPixmap& pixmap)
@@ -245,8 +266,9 @@ void QmCrossButton::leaveEvent(QEvent* event)
 
 void QmCrossButton::paintEvent(QPaintEvent* event)
 {
+    QPainter painter(this);
+
     if (d_->curr_pixmap_) {
-        QPainter painter(this);
         QRect pixmap_rect = d_->buttonRect().toRect();
         if (d_->pressed_) {
             switch (d_->curr_area_) {
@@ -284,4 +306,9 @@ void QmCrossButton::setRepeatUtil(int ms)
 void QmCrossButton::setRepeatInterval(int ms)
 {
     d_->repeat_timer_->setInterval(ms);
+}
+
+void QmCrossButton::setInteractiveIgnored(const QPainterPath& area)
+{
+    d_->ignored_area_ = area;
 }

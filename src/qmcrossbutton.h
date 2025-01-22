@@ -45,6 +45,8 @@ public:
     void setRepeatUtil(int ms);
     void setRepeatInterval(int ms);
 
+    void setInteractiveIgnored(const QPainterPath& area);
+
 signals:
     void clicked(ClickedArea area);
 
