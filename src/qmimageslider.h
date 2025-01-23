@@ -23,6 +23,8 @@ public:
 
 signals:
     void valueChanged(float value);
+    void sliderReleased();
+    void sliderPressed();
 
 protected:
     void paintEvent(QPaintEvent* event) override;

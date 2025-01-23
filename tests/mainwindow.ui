@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QmImageSlider" name="frame">
+    <widget class="QmAutoReturnSlider" name="frame">
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
@@ -29,9 +29,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QmImageSlider</class>
-   <extends>QFrame</extends>
-   <header>qmimageslider.h</header>
+   <class>QmAutoReturnSlider</class>
+   <extends>QmImageSlider</extends>
+   <header>qmautoreturnslider.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

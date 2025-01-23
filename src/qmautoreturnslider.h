@@ -1,11 +1,11 @@
 #pragma once
 
+#include "qmimageslider.h"
 #include "qmwidgets_global.h"
-#include <QSlider>
 
 class QmAutoReturnSliderPrivate;
 
-class QMWIDGETS_EXPORT QmAutoReturnSlider : public QSlider {
+class QMWIDGETS_EXPORT QmAutoReturnSlider : public QmImageSlider {
     Q_OBJECT
 public:
     explicit QmAutoReturnSlider(QWidget* parent = nullptr);

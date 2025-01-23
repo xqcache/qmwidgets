@@ -16,10 +16,10 @@ private:
 };
 
 QmAutoReturnSlider::QmAutoReturnSlider(QWidget* parent)
-    : QSlider(parent)
+    : QmImageSlider(parent)
     , d_(new QmAutoReturnSliderPrivate(this))
 {
-    connect(this, &QSlider::sliderReleased, this, &QmAutoReturnSlider::onSliderReleased);
+    connect(this, &QmImageSlider::sliderReleased, this, &QmAutoReturnSlider::onSliderReleased);
 }
 
 QmAutoReturnSlider::~QmAutoReturnSlider() noexcept
@@ -47,20 +47,20 @@ void QmAutoReturnSlider::keyPressEvent(QKeyEvent* event)
 void QmAutoReturnSlider::mouseMoveEvent(QMouseEvent* event)
 {
     QSignalBlocker blocker(this);
-    QSlider::mouseMoveEvent(event);
+    QmImageSlider::mouseMoveEvent(event);
 }
 
 void QmAutoReturnSlider::mouseReleaseEvent(QMouseEvent* event)
 {
     emit valueChanged(value());
-    QSlider::mouseReleaseEvent(event);
+    QmImageSlider::mouseReleaseEvent(event);
 }
 
 void QmAutoReturnSlider::mousePressEvent(QMouseEvent* event)
 {
     {
         QSignalBlocker blocker(this);
-        QSlider::mousePressEvent(event);
+        QmImageSlider::mousePressEvent(event);
     }
 }
 

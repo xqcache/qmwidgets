@@ -144,12 +144,16 @@ void QmImageSlider::mousePressEvent(QMouseEvent* event)
     if (handleInteractiveRect().contains(event->pos())) {
         d_->clicked_pos_ = event->pos();
         d_->clicked_ = true;
+        emit sliderPressed();
     }
 }
 
 void QmImageSlider::mouseReleaseEvent(QMouseEvent* event)
 {
-    d_->clicked_ = false;
+    if (d_->clicked_) {
+        d_->clicked_ = false;
+        emit sliderReleased();
+    }
 }
 
 void QmImageSlider::mouseMoveEvent(QMouseEvent* event)
