@@ -17,6 +17,7 @@ private:
     float value_ { 0.0f };
     float minimum_ { 0.0f };
     float maximum_ { 100.0f };
+    QMarginsF interactive_paddings_ { 0, 0, 0, 0 };
 
     QPoint clicked_pos_;
     bool clicked_ { false };
@@ -27,13 +28,15 @@ QmImageSliderPrivate::QmImageSliderPrivate(QmImageSlider* q)
 {
     box_pixmap_ = std::make_unique<QmNinePatchPixmap>(":/qmwidgets/icons/autoreturnslider/slider_box", QRect(17, 24, 63, 253));
     handle_pixmap_ = std::make_unique<QmNinePatchPixmap>(":/qmwidgets/icons/autoreturnslider/slider_handle", QRect(24, 24, 50, 28));
+    interactive_paddings_ = { 9, 12, 9, 10 };
 }
 
 QmImageSlider::QmImageSlider(QWidget* parent)
     : QFrame(parent)
     , d_(new QmImageSliderPrivate(this))
 {
-    setMinimumSize(d_->box_pixmap_->minimumSize());
+    setMinimumSize(qMax(d_->box_pixmap_->minimumSize().width(), d_->handle_pixmap_->minimumSize().width()),
+        qMax(d_->box_pixmap_->minimumSize().height(), d_->handle_pixmap_->minimumSize().height()));
 }
 
 QmImageSlider::~QmImageSlider() noexcept
@@ -86,6 +89,16 @@ float QmImageSlider::value() const
     return d_->value_;
 }
 
+float QmImageSlider::minimum() const
+{
+    return d_->minimum_;
+}
+
+float QmImageSlider::maximum() const
+{
+    return d_->maximum_;
+}
+
 void QmImageSlider::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
@@ -136,7 +149,7 @@ QRectF QmImageSlider::handleInteractiveRect() const
     result.setRight(result.right() - (handle_rect.right() - handle_inner.right()));
     result.setBottom(result.bottom() - (handle_rect.bottom() - handle_inner.bottom()));
 
-    return result;
+    return result.marginsAdded(d_->interactive_paddings_);
 }
 
 void QmImageSlider::mousePressEvent(QMouseEvent* event)

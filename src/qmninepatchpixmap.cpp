@@ -142,7 +142,10 @@ QSize QmNinePatchPixmap::minimumSize() const
     if (inner_rect_.isNull()) {
         return { 0, 0 };
     }
-    return { size() - inner_rect_.size() };
+    QSize min_size = size() - inner_rect_.size();
+    min_size.setWidth(qMax(0, min_size.width()));
+    min_size.setHeight(qMax(0, min_size.height()));
+    return min_size;
 }
 
 QSize QmNinePatchPixmap::size() const

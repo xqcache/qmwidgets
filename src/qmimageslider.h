@@ -8,6 +8,8 @@ class QmImageSliderPrivate;
 class QMWIDGETS_EXPORT QmImageSlider : public QFrame {
     Q_OBJECT
     Q_PROPERTY(float value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(float minimum READ minimum WRITE setMinimum)
+    Q_PROPERTY(float maximum READ maximum WRITE setMaximum)
 public:
     explicit QmImageSlider(QWidget* parent = nullptr);
     ~QmImageSlider() noexcept override;
@@ -20,6 +22,8 @@ public:
     void setMaximum(float v);
 
     float value() const;
+    float minimum() const;
+    float maximum() const;
 
 signals:
     void valueChanged(float value);

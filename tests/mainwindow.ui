@@ -13,21 +13,32 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QmAutoReturnSlider" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::Shape::StyledPanel</enum>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Shadow::Raised</enum>
-     </property>
+     <widget class="QmAutoReturnSlider" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QmImageSlider" name="slider"/>
     </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>QmImageSlider</class>
+   <extends>QFrame</extends>
+   <header>qmimageslider.h</header>
+  </customwidget>
   <customwidget>
    <class>QmAutoReturnSlider</class>
    <extends>QmImageSlider</extends>
