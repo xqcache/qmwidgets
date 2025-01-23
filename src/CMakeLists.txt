@@ -48,6 +48,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmgradientseparator.cpp
     qmautoreturnslider.h
     qmautoreturnslider.cpp
+    qmimageslider.h
+    qmimageslider.cpp
     qmninepatchpixmap.h
     qmninepatchpixmap.cpp
 )

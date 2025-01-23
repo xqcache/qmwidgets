@@ -29,4 +29,9 @@
         <file>assets/icons/cross_button_ew_east_clicked.png</file>
 
     </qresource>
+
+    <qresource prefix="/qmwidgets/icons/autoreturnslider">
+        <file alias="slider_box">assets/icons/autoreturnslider/slider_box.png</file>
+        <file alias="slider_handle">assets/icons/autoreturnslider/slider_handle.png</file>
+    </qresource>
 </RCC>

@@ -23,6 +23,8 @@ add_library(${TARGET_NAME} SHARED
     qmswitchplugin.cpp
     qmthermometerplugin.h
     qmthermometerplugin.cpp
+    qmimagesliderplugin.h
+    qmimagesliderplugin.cpp
 )
 target_link_libraries(${TARGET_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
