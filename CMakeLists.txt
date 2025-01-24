@@ -9,6 +9,8 @@ option(BUILD_SHARED_LIBS "" ON)
 option(BUILD_TESTS "" OFF)
 option(BUILD_DESIGNER_PLUGIN "" OFF)
 
+option(BUILD_QRCODEVIEW "" OFF)
+
 if(MSVC)
     add_compile_options(/utf-8)
 endif()
@@ -19,3 +21,4 @@ if(BUILD_TESTS)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(3rdparty)

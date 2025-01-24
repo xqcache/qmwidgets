@@ -57,3 +57,8 @@ target_sources(${TARGET_NAME} PRIVATE
 if(BUILD_DESIGNER_PLUGIN)
     add_subdirectory(plugins)
 endif()
+
+if(BUILD_QRCODEVIEW)
+    target_sources(${TARGET_NAME} PRIVATE qmqrcodeview.cpp qmqrcodeview.h)
+    target_link_libraries(${TARGET_NAME} PRIVATE qrencode)
+endif()

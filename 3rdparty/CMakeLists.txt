@@ -1,0 +1,5 @@
+if(BUILD_QRCODEVIEW)
+    set(WITH_TOOLS OFF CACHE BOOL "" FORCE)
+    add_subdirectory(libqrencode)
+    set_target_properties(qrencode PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/libqrencode)
+endif()
