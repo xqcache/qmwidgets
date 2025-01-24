@@ -293,17 +293,21 @@ void QmCrossButton::paintEvent(QPaintEvent* event)
     }
 }
 
-void QmCrossButton::setRepeatUtil(int ms)
+void QmCrossButton::setAutoRepeat(bool on)
 {
-    if (ms > 0) {
+    if (on) {
         connect(d_->repeat_timer_, &QTimer::timeout, this, [this] { emit clicked(d_->curr_area_); });
     } else {
         d_->repeat_timer_->disconnect(this);
     }
+}
+
+void QmCrossButton::setAutoRepeatDelay(int ms)
+{
     d_->repeat_util_ = ms;
 }
 
-void QmCrossButton::setRepeatInterval(int ms)
+void QmCrossButton::setAutoRepeatInterval(int ms)
 {
     d_->repeat_timer_->setInterval(ms);
 }

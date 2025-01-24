@@ -42,8 +42,9 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-    void setRepeatUtil(int ms);
-    void setRepeatInterval(int ms);
+    void setAutoRepeat(bool on);
+    void setAutoRepeatDelay(int ms);
+    void setAutoRepeatInterval(int ms);
 
     void setInteractiveIgnored(const QPainterPath& area);
 
