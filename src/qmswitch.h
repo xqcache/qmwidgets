@@ -5,57 +5,59 @@
 
 class QmSwitchPrivate;
 
-class QMWIDGETS_EXPORT QmSwitch : public QFrame
-{
-	Q_OBJECT
-	Q_PROPERTY(QPointF handlePos READ _handlePos WRITE _setHandlePos DESIGNABLE false)
-	Q_PROPERTY(bool checked READ isChecked WRITE setChecked NOTIFY toggled)
-	Q_PROPERTY(int rectRadius READ rectRadius WRITE setRectRadius)
-	Q_PROPERTY(int padding READ padding WRITE setPadding)
-	Q_PROPERTY(QColor checkedHandleColor READ checkedHandleColor WRITE setCheckedHandleColor)
-	Q_PROPERTY(QColor uncheckedHandleColor READ uncheckedHandleColor WRITE setUncheckedHandleColor)
-	Q_PROPERTY(QColor checkedBgColor READ checkedBgColor WRITE setCheckedBgColor)
-	Q_PROPERTY(QColor uncheckedBgColor READ uncheckedBgColor WRITE setUncheckedBgColor)
+class QMWIDGETS_EXPORT QmSwitch : public QFrame {
+    Q_OBJECT
+    Q_PROPERTY(QPointF handlePos READ _handlePos WRITE _setHandlePos DESIGNABLE false)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked NOTIFY toggled)
+    Q_PROPERTY(int rectRadius READ rectRadius WRITE setRectRadius)
+    Q_PROPERTY(int padding READ padding WRITE setPadding)
+    Q_PROPERTY(QColor checkedHandleColor READ checkedHandleColor WRITE setCheckedHandleColor)
+    Q_PROPERTY(QColor uncheckedHandleColor READ uncheckedHandleColor WRITE setUncheckedHandleColor)
+    Q_PROPERTY(QColor checkedBgColor READ checkedBgColor WRITE setCheckedBgColor)
+    Q_PROPERTY(QColor uncheckedBgColor READ uncheckedBgColor WRITE setUncheckedBgColor)
 public:
-	QmSwitch(QWidget *parent);
-	~QmSwitch();
+    QmSwitch(QWidget* parent);
+    ~QmSwitch();
 
-	void setCheckedBgColor(const QColor &color);
-	QColor checkedBgColor() const;
+    void setCheckedBgColor(const QColor& color);
+    QColor checkedBgColor() const;
 
-	void setUncheckedBgColor(const QColor &color);
-	QColor uncheckedBgColor() const;
+    void setUncheckedBgColor(const QColor& color);
+    QColor uncheckedBgColor() const;
 
-	void setCheckedHandleColor(const QColor &color);
-	QColor checkedHandleColor() const;
+    void setCheckedHandleColor(const QColor& color);
+    QColor checkedHandleColor() const;
 
-	void setUncheckedHandleColor(const QColor &color);
-	QColor uncheckedHandleColor() const;
+    void setUncheckedHandleColor(const QColor& color);
+    QColor uncheckedHandleColor() const;
 
-	void setRectRadius(int rectRadius);
-	int rectRadius();
+    void setRectRadius(int rectRadius);
+    int rectRadius();
 
-	void setPadding(int padding);
-	int padding();
+    void setPadding(int padding);
+    int padding();
 
-	void _setHandlePos(const QPointF &pos);
-	QPointF _handlePos() const;
+    void _setHandlePos(const QPointF& pos);
+    QPointF _handlePos() const;
 
+    void setChecked(bool checked);
+    bool isChecked();
 
+    void setCheckedText(const QString& text);
+    void setUncheckedText(const QString& text);
 
-	void setChecked(bool checked);
-	bool isChecked();
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
-	void toggled(bool checked);
+    void toggled(bool checked);
 
 protected:
-	void paintEvent(QPaintEvent *event);
-	void mousePressEvent(QMouseEvent *event);
-	void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 private:
-	QmSwitchPrivate *d;
+    QmSwitchPrivate* d;
 
-	void updateHandlePos();
+    void updateHandlePos();
 };

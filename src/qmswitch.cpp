@@ -1,205 +1,214 @@
-#include "stdafx.h"
 #include "qmswitch.h"
+#include "stdafx.h"
+#include <QGraphicsDropShadowEffect>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPropertyAnimation>
-#include <QGraphicsDropShadowEffect>
-#include <QMouseEvent>
 
 class QmSwitchPrivate {
 private:
-	QColor checkedBgColor;
-	QColor uncheckedBgColor;
-	QColor checkedHandleColor;
-	QColor uncheckedHandleColor;
-	bool checked;
-	QPointF handlePos;
+    QColor checkedBgColor;
+    QColor uncheckedBgColor;
+    QColor checkedHandleColor;
+    QColor uncheckedHandleColor;
+    bool checked;
+    QPointF handlePos;
 
-	int padding;
-	int rectRadius;
-	
-	friend class QmSwitch;
+    int padding;
+    int rectRadius;
+
+    QString checked_text;
+    QString unchecked_text;
+
+    friend class QmSwitch;
 };
 
-QmSwitch::QmSwitch(QWidget *parent)
-	: QFrame(parent), d(new QmSwitchPrivate)
+QmSwitch::QmSwitch(QWidget* parent)
+    : QFrame(parent)
+    , d(new QmSwitchPrivate)
 {
-	d->checkedBgColor = QColor("#039BE5");
-	d->uncheckedBgColor = QColor("#cfd8dc");
-	d->checkedHandleColor = QColor("#eeeeee");
-	d->uncheckedHandleColor = QColor("#f5f5f5");
-	d->rectRadius = 14;
-	d->checked = false;
-	d->handlePos = QPointF(0, 0);
-	d->padding = 2;
+    d->checkedBgColor = QColor("#039BE5");
+    d->uncheckedBgColor = QColor("#cfd8dc");
+    d->checkedHandleColor = QColor("#eeeeee");
+    d->uncheckedHandleColor = QColor("#f5f5f5");
+    d->rectRadius = 8;
+    d->checked = false;
+    d->handlePos = QPointF(0, 0);
+    d->padding = 2;
 
-	QGraphicsDropShadowEffect *pEffect = new QGraphicsDropShadowEffect(this);
-	pEffect->setOffset(5, 5);
-	pEffect->setBlurRadius(8);
-	pEffect->setColor(Qt::lightGray);
-	setGraphicsEffect(pEffect);
+    d->checked_text = tr("On");
+    d->unchecked_text = tr("Off");
+
+    // QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
+    // pEffect->setOffset(5, 5);
+    // pEffect->setBlurRadius(18);
+    // pEffect->setColor(Qt::black);
+    // setGraphicsEffect(pEffect);
 }
 
 QmSwitch::~QmSwitch()
 {
-	delete d;
+    delete d;
 }
 
-void QmSwitch::setCheckedBgColor(const QColor &color)
+QSize QmSwitch::sizeHint() const
 {
-	d->checkedBgColor = color;
-	update();
+    return { 10, fontMetrics().height() * 2 };
+}
+
+void QmSwitch::setCheckedBgColor(const QColor& color)
+{
+    d->checkedBgColor = color;
+    update();
 }
 
 QColor QmSwitch::checkedBgColor() const
 {
-	return d->checkedBgColor;
+    return d->checkedBgColor;
 }
 
-void QmSwitch::setUncheckedBgColor(const QColor &color)
+void QmSwitch::setUncheckedBgColor(const QColor& color)
 {
-	d->uncheckedBgColor = color;
-	update();
+    d->uncheckedBgColor = color;
+    update();
 }
 
 QColor QmSwitch::uncheckedBgColor() const
 {
-	return d->uncheckedBgColor;
+    return d->uncheckedBgColor;
 }
 
-void QmSwitch::setCheckedHandleColor(const QColor &color)
+void QmSwitch::setCheckedHandleColor(const QColor& color)
 {
-	d->checkedHandleColor = color;
-	update();
+    d->checkedHandleColor = color;
+    update();
 }
 
 QColor QmSwitch::checkedHandleColor() const
 {
-	return d->checkedHandleColor;
+    return d->checkedHandleColor;
 }
 
-void QmSwitch::setUncheckedHandleColor(const QColor &color)
+void QmSwitch::setUncheckedHandleColor(const QColor& color)
 {
-	d->uncheckedHandleColor = color;
-	update();
+    d->uncheckedHandleColor = color;
+    update();
 }
 
 QColor QmSwitch::uncheckedHandleColor() const
 {
-	return d->uncheckedHandleColor;
+    return d->uncheckedHandleColor;
 }
 
 void QmSwitch::setRectRadius(int rectRadius)
 {
-	d->rectRadius = rectRadius;
-	update();
+    d->rectRadius = rectRadius;
+    update();
 }
 
 int QmSwitch::rectRadius()
 {
-	return d->rectRadius;
+    return d->rectRadius;
 }
 
 void QmSwitch::setPadding(int padding)
 {
-	d->padding = padding;
-	update();
+    d->padding = padding;
+    update();
 }
 
 int QmSwitch::padding()
 {
-	return d->padding;
+    return d->padding;
 }
 
-void QmSwitch::_setHandlePos(const QPointF &pos)
+void QmSwitch::_setHandlePos(const QPointF& pos)
 {
-	d->handlePos = pos;
-	update();
+    d->handlePos = pos;
+    update();
 }
 
 QPointF QmSwitch::_handlePos() const
 {
-	return d->handlePos;
+    return d->handlePos;
 }
 
 void QmSwitch::setChecked(bool checked)
 {
-	d->checked = checked;
-	updateHandlePos();
-	update();
+    d->checked = checked;
+    updateHandlePos();
+    update();
 }
 
 bool QmSwitch::isChecked()
 {
-	return d->checked;
+    return d->checked;
 }
 
-void QmSwitch::paintEvent(QPaintEvent *event)
+void QmSwitch::paintEvent(QPaintEvent* event)
 {
-	QPainter p(this);
+    QPainter p(this);
 
-	p.setPen(Qt::NoPen);
-	p.setBrush(Qt::NoBrush);
-	p.setRenderHint(QPainter::Antialiasing);
+    p.setPen(Qt::NoPen);
+    p.setBrush(Qt::NoBrush);
+    p.setRenderHint(QPainter::Antialiasing);
 
-	QRectF r = rect();
+    QRectF r = rect();
 
-	QColor handleColor;
+    QColor handleColor;
 
-	p.save();
-	if (d->checked) {
-		p.setBrush(d->checkedBgColor);
-		handleColor = d->checkedHandleColor;
-	}
-	else {
-		p.setBrush(d->uncheckedBgColor);
-		handleColor = d->uncheckedHandleColor;
-	}
-	p.drawRoundedRect(r, d->rectRadius, d->rectRadius);
-	p.restore();
+    p.save();
+    if (d->checked) {
+        p.setBrush(d->checkedBgColor);
+        handleColor = d->checkedHandleColor;
+    } else {
+        p.setBrush(d->uncheckedBgColor);
+        handleColor = d->uncheckedHandleColor;
+    }
+    p.drawRoundedRect(r, d->rectRadius, d->rectRadius);
+    p.restore();
 
-	p.save();
-	QRectF handleRect = QRectF(d->handlePos, QSizeF(r.width() / 2, r.height())).adjusted(d->padding, d->padding, -d->padding, -d->padding);
-	p.setBrush(handleColor);
-	p.drawRoundedRect(handleRect, d->rectRadius - d->padding, d->rectRadius - d->padding);
-	p.restore();
-	
+    p.save();
+    QRectF handleRect = QRectF(d->handlePos, QSizeF(r.width() / 2, r.height())).adjusted(d->padding, d->padding, -d->padding, -d->padding);
+    p.setBrush(handleColor);
+    p.drawRoundedRect(handleRect, d->rectRadius - d->padding, d->rectRadius - d->padding);
+    p.setPen("#252525");
+    p.drawText(handleRect, Qt::AlignCenter, d->checked ? d->checked_text : d->unchecked_text);
+    p.restore();
 }
 
-void QmSwitch::mousePressEvent(QMouseEvent *event)
+void QmSwitch::mousePressEvent(QMouseEvent* event)
 {
-	d->checked = !d->checked;
+    d->checked = !d->checked;
 
-	QPointF leftPos = QPointF(0, d->handlePos.y());
-	QPointF rightPos = QPointF(width() / 2, d->handlePos.y());
+    QPointF leftPos = QPointF(0, d->handlePos.y());
+    QPointF rightPos = QPointF(width() / 2, d->handlePos.y());
 
-	QPropertyAnimation *pAnimation = new QPropertyAnimation(this, "handlePos");
-	pAnimation->setEasingCurve(QEasingCurve::OutQuart);
-	pAnimation->setDuration(500);
-	if (d->checked) {
-		pAnimation->setStartValue(leftPos);
-		pAnimation->setEndValue(rightPos);
-	}
-	else {
-		pAnimation->setStartValue(rightPos);
-		pAnimation->setEndValue(leftPos);
-	}
-	pAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-
-	emit toggled(d->checked);
+    QPropertyAnimation* pAnimation = new QPropertyAnimation(this, "handlePos");
+    pAnimation->setEasingCurve(QEasingCurve::OutQuart);
+    pAnimation->setDuration(200);
+    if (d->checked) {
+        pAnimation->setStartValue(leftPos);
+        pAnimation->setEndValue(rightPos);
+    } else {
+        pAnimation->setStartValue(rightPos);
+        pAnimation->setEndValue(leftPos);
+    }
+    pAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    connect(pAnimation, &QPropertyAnimation::finished, this, [this] { emit toggled(d->checked); });
 }
 
-void QmSwitch::resizeEvent(QResizeEvent *event)
+void QmSwitch::resizeEvent(QResizeEvent* event)
 {
-	updateHandlePos();
+    updateHandlePos();
 }
 
 void QmSwitch::updateHandlePos()
 {
-	if (d->checked) {
-		d->handlePos.setX(width() / 2);
-	}
-	else {
-		d->handlePos.setX(0);
-	}
+    if (d->checked) {
+        d->handlePos.setX(width() / 2);
+    } else {
+        d->handlePos.setX(0);
+    }
 }
