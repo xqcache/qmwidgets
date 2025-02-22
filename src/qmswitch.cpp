@@ -173,7 +173,7 @@ void QmSwitch::paintEvent(QPaintEvent* event)
     QRectF handleRect = QRectF(d->handlePos, QSizeF(r.width() / 2, r.height())).adjusted(d->padding, d->padding, -d->padding, -d->padding);
     p.setBrush(handleColor);
     p.drawRoundedRect(handleRect, d->rectRadius - d->padding, d->rectRadius - d->padding);
-    p.setPen("#252525");
+    p.setPen(isChecked() ? QColor("#252525") : QColor(Qt::white));
     p.drawText(handleRect, Qt::AlignCenter, d->checked ? d->checked_text : d->unchecked_text);
     p.restore();
 }
