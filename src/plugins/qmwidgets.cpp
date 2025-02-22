@@ -1,6 +1,7 @@
 #include "qmwidgets.h"
 #include "qmanalogclockplugin.h"
 #include "qmcirclelightplugin.h"
+#include "qmcrossbuttonplugin.h"
 #include "qmgaugecarplugin.h"
 #include "qmimageanalogclockplugin.h"
 #include "qmimagesliderplugin.h"
@@ -17,6 +18,7 @@ QmWidgets::QmWidgets(QObject* parent /*= Q_NULLPTR*/)
     m_widgets.append(new QmCircleLightPlugin(this));
     m_widgets.append(new QmImageAnalogClockPlugin(this));
     m_widgets.append(new QmImageSliderPlugin(this));
+    m_widgets.append(new QmCrossButtonPlugin(this));
 }
 
 QList<QDesignerCustomWidgetInterface*> QmWidgets::customWidgets() const
