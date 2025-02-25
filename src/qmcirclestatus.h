@@ -23,6 +23,8 @@ public:
     void setStatus(Status status);
     void setText(const QString& text);
 
+    QSize minimumSizeHint() const override;
+
 protected:
     void paintEvent(QPaintEvent* event) override;
 

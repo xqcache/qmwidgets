@@ -39,6 +39,13 @@ void QmCircleStatus::setText(const QString& text)
     update();
 }
 
+QSize QmCircleStatus::minimumSizeHint() const
+{
+    QSize text_size = fontMetrics().boundingRect(d_ptr->text).size();
+    int dimen = qMax(text_size.width(), text_size.height()) * 2;
+    return { dimen, dimen };
+}
+
 void QmCircleStatus::paintEvent(QPaintEvent* event)
 {
     Q_D(QmCircleStatus);
