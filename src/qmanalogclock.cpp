@@ -48,9 +48,10 @@ QmAnalogClock::QmAnalogClock(QWidget* parent)
     d->showScaleText = true;
     d->showSecondHand = true;
 
-    connect(d->refreshTimer, &QTimer::timeout, [=]() { 
-		d->dateTime.setSecsSinceEpoch(d->dateTime.toSecsSinceEpoch() + 1); 
-		update(); });
+    connect(d->refreshTimer, &QTimer::timeout, [this]() {
+        d->dateTime.setSecsSinceEpoch(d->dateTime.toSecsSinceEpoch() + 1);
+        update();
+    });
 
     d->refreshTimer->start(1000);
     d->dateTime = QDateTime::currentDateTime();

@@ -39,9 +39,10 @@ QmImageAnalogClock::QmImageAnalogClock(QWidget* parent)
     d->secondHandAngleOffset = 170;
 
     d->refreshTimer = new QTimer(this);
-    connect(d->refreshTimer, &QTimer::timeout, [=]() {
-		d->dateTime.setSecsSinceEpoch(d->dateTime.toSecsSinceEpoch() + 1);
-		update(); });
+    connect(d->refreshTimer, &QTimer::timeout, [this]() {
+        d->dateTime.setSecsSinceEpoch(d->dateTime.toSecsSinceEpoch() + 1);
+        update();
+    });
     d->refreshTimer->start(1000);
 
     d->dateTime = QDateTime::currentDateTime();
