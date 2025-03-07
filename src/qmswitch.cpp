@@ -37,9 +37,6 @@ QmSwitch::QmSwitch(QWidget* parent)
     d->handlePos = QPointF(0, 0);
     d->padding = 2;
 
-    d->checked_text = tr("On");
-    d->unchecked_text = tr("Off");
-
     // QGraphicsDropShadowEffect* pEffect = new QGraphicsDropShadowEffect(this);
     // pEffect->setOffset(5, 5);
     // pEffect->setBlurRadius(18);
@@ -54,7 +51,7 @@ QmSwitch::~QmSwitch()
 
 QSize QmSwitch::sizeHint() const
 {
-    return { 10, fontMetrics().height() * 2 };
+    return { fontMetrics().height() * 2, fontMetrics().height() };
 }
 
 void QmSwitch::setCheckedBgColor(const QColor& color)
@@ -99,6 +96,18 @@ void QmSwitch::setUncheckedHandleColor(const QColor& color)
 QColor QmSwitch::uncheckedHandleColor() const
 {
     return d->uncheckedHandleColor;
+}
+
+void QmSwitch::setCheckedText(const QString& text)
+{
+    d->checked_text = text;
+    update();
+}
+
+void QmSwitch::setUncheckedText(const QString& text)
+{
+    d->unchecked_text = text;
+    update();
 }
 
 void QmSwitch::setRectRadius(int rectRadius)
@@ -173,8 +182,11 @@ void QmSwitch::paintEvent(QPaintEvent* event)
     QRectF handleRect = QRectF(d->handlePos, QSizeF(r.width() / 2, r.height())).adjusted(d->padding, d->padding, -d->padding, -d->padding);
     p.setBrush(handleColor);
     p.drawRoundedRect(handleRect, d->rectRadius - d->padding, d->rectRadius - d->padding);
-    p.setPen(isChecked() ? QColor("#252525") : QColor(Qt::white));
-    p.drawText(handleRect, Qt::AlignCenter, d->checked ? d->checked_text : d->unchecked_text);
+    auto text = d->checked ? d->checked_text : d->unchecked_text;
+    if (!text.isEmpty()) {
+        p.setPen(isChecked() ? QColor("#252525") : QColor(Qt::white));
+        p.drawText(handleRect, Qt::AlignCenter, text);
+    }
     p.restore();
 }
 
