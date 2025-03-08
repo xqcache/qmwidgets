@@ -52,6 +52,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmimageslider.cpp
     qmninepatchpixmap.h
     qmninepatchpixmap.cpp
+    qmdynamicmessage.h
+    qmdynamicmessage.cpp
 )
 
 if(BUILD_DESIGNER_PLUGIN)
