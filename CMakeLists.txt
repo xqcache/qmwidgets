@@ -6,16 +6,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_SHARED_LIBS "" ON)
-option(BUILD_TESTS "" OFF)
-option(BUILD_DESIGNER_PLUGIN "" OFF)
-
-option(BUILD_QRCODEVIEW "" OFF)
+option(BUILD_QMWIDGETS_TESTS "" OFF)
+option(BUILD_QMWIDGETS_DESIGNER_PLUGIN "" OFF)
+option(BUILD_QMWIDGETS_QRCODEVIEW "" OFF)
 
 if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-if(BUILD_TESTS)
+if(BUILD_QMWIDGETS_TESTS)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     add_subdirectory(tests)
 endif()

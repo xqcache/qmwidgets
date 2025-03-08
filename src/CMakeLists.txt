@@ -56,11 +56,11 @@ target_sources(${TARGET_NAME} PRIVATE
     qmdynamicmessage.cpp
 )
 
-if(BUILD_DESIGNER_PLUGIN)
+if(BUILD_QMWIDGETS_DESIGNER_PLUGIN)
     add_subdirectory(plugins)
 endif()
 
-if(BUILD_QRCODEVIEW)
+if(BUILD_QMWIDGETS_QRCODEVIEW)
     target_sources(${TARGET_NAME} PRIVATE qmqrcodeview.cpp qmqrcodeview.h)
     target_link_libraries(${TARGET_NAME} PRIVATE qrencode)
 endif()
