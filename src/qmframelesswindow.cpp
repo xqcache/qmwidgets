@@ -85,9 +85,9 @@ bool QmFramelessWindow::event(QEvent* event)
             AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
             double dpr = devicePixelRatioF();
             frame.left = std::abs(frame.left / dpr);
-            frame.top = std::abs(frame.bottom / dpr);
+            frame.top = std::abs(frame.bottom / dpr) - 1;
             frame.bottom = std::abs(frame.bottom / dpr);
-            frame.right = std::abs(frame.right / dpr);
+            frame.right = std::abs(frame.right / dpr) - 1;
             setContentsMargins(frame.left, frame.top, frame.right, frame.bottom);
         } else {
             setContentsMargins(QMargins(0, 0, 0, 0));
