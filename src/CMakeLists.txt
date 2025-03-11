@@ -54,6 +54,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmninepatchpixmap.cpp
     qmdynamicmessage.h
     qmdynamicmessage.cpp
+    qmtitlecontainer.h
+    qmtitlecontainer.cpp
 )
 
 if(BUILD_QMWIDGETS_DESIGNER_PLUGIN)
