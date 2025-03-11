@@ -190,3 +190,8 @@ void QmImageSlider::mouseMoveEvent(QMouseEvent* event)
         d_->clicked_pos_ = event->pos();
     }
 }
+
+bool QmImageSlider::isPressed() const
+{
+    return d_->clicked_;
+}
