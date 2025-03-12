@@ -71,10 +71,7 @@ void QmAutoReturnSlider::keyPressEvent(QKeyEvent* event)
 
 void QmAutoReturnSlider::mousePressEvent(QMouseEvent* event)
 {
-    {
-        QSignalBlocker blocker(this);
-        QmImageSlider::mousePressEvent(event);
-    }
+    QmImageSlider::mousePressEvent(event);
     if (d_->repeat_timer_->isActive()) {
         d_->repeat_timer_->stop();
     }
