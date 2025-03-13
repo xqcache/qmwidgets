@@ -19,7 +19,7 @@ endif()
 
 target_link_libraries(${TARGET_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_precompile_headers(${TARGET_NAME} PUBLIC "stdafx.h")
-target_include_directories(${TARGET_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+target_include_directories(${TARGET_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
 target_sources(${TARGET_NAME} PRIVATE
     qmassets.qrc
@@ -57,6 +57,12 @@ target_sources(${TARGET_NAME} PRIVATE
     qmtitlecontainer.h
     qmtitlecontainer.cpp
 )
+
+if(TAKEOVER_WIN32_HTCAPTION_EVENT)
+    # set(TAKEOVER_WIN32_HTCAPTION_EVENT)
+endif()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qmwidgets_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/qmwidgets_config.h @ONLY)
 
 if(BUILD_QMWIDGETS_DESIGNER_PLUGIN)
     add_subdirectory(plugins)
