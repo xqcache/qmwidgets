@@ -49,8 +49,8 @@ void QmTitleContainer::setTitleWidget(QWidget* widget)
     if (!widget) {
         return;
     }
-    d_->layout->removeWidget(d_->title_widget);
     if (!d_->title_widget) {
+        d_->layout->removeWidget(d_->title_widget);
         d_->title_widget->deleteLater();
     }
 
@@ -64,8 +64,12 @@ void QmTitleContainer::setWidget(QWidget* widget)
     if (!widget) {
         return;
     }
+
+    if (d_->widget) {
+        d_->layout->removeWidget(d_->widget);
+        d_->widget->deleteLater();
+    }
     d_->widget = widget;
     d_->widget->setParent(this);
-    d_->layout->removeWidget(d_->widget);
-    d_->layout->addWidget(widget);
+    d_->layout->addWidget(d_->widget);
 }
