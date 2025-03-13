@@ -11,6 +11,7 @@ public:
     ~QmTitleContainer() noexcept override;
 
     void setTitle(const QString& text);
+    void setTitleAlignment(Qt::Alignment align);
     void setTitleWidget(QWidget* widget);
     void setWidget(QWidget* widget);
 

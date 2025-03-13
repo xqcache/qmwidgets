@@ -16,6 +16,7 @@ struct QmTitleContainerPrivate {
         layout->setContentsMargins(0, 0, 0, 0);
 
         auto* label = new QLabel(QmTitleContainer::tr("Unnamed"), continer);
+        label->setProperty("Style", "Title");
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         label->setAlignment(Qt::AlignCenter);
 
@@ -41,6 +42,13 @@ void QmTitleContainer::setTitle(const QString& text)
 {
     if (auto* lbl_title = qobject_cast<QLabel*>(d_->title_widget); lbl_title) {
         lbl_title->setText(text);
+    }
+}
+
+void QmTitleContainer::setTitleAlignment(Qt::Alignment align)
+{
+    if (auto* lbl_title = qobject_cast<QLabel*>(d_->title_widget); lbl_title) {
+        lbl_title->setAlignment(align);
     }
 }
 
