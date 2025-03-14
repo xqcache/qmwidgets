@@ -11,8 +11,11 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+    void setLineWidth(int width);
+
 protected:
     void paintEvent(QPaintEvent* event) override;
 
 private:
+    int line_width_ { 2 };
 };

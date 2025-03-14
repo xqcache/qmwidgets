@@ -21,6 +21,8 @@ private:
 
     QPoint clicked_pos_;
     bool clicked_ { false };
+
+    bool aspect_ratio_ { false };
 };
 
 QmImageSliderPrivate::QmImageSliderPrivate(QmImageSlider* q)
@@ -47,6 +49,39 @@ QmImageSlider::~QmImageSlider() noexcept
 QSize QmImageSlider::sizeHint() const
 {
     return d_->box_pixmap_->size();
+}
+
+QSize QmImageSlider::minimumSizeHint() const
+{
+    return QSize(qMax(d_->box_pixmap_->minimumSize().width(), d_->handle_pixmap_->minimumSize().width()),
+        qMax(d_->box_pixmap_->minimumSize().height(), d_->handle_pixmap_->minimumSize().height()));
+}
+
+void QmImageSlider::setBoxPixmap(QmNinePatchPixmap* pixmap)
+{
+    if (!pixmap) {
+        return;
+    }
+    d_->box_pixmap_.reset(pixmap);
+}
+
+void QmImageSlider::setHandlePixmap(QmNinePatchPixmap* pixmap)
+{
+    if (!pixmap) {
+        return;
+    }
+    d_->handle_pixmap_.reset(pixmap);
+}
+
+void QmImageSlider::setInteractivePadding(const QMarginsF& paddings)
+{
+    d_->interactive_paddings_ = paddings;
+}
+
+void QmImageSlider::setScaleAspectRatio(bool enable)
+{
+    d_->aspect_ratio_ = enable;
+    update();
 }
 
 void QmImageSlider::setValue(float value)
@@ -102,13 +137,36 @@ float QmImageSlider::maximum() const
 void QmImageSlider::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    d_->box_pixmap_->draw(rect(), &painter);
+
+    d_->box_pixmap_->draw(boxRect().toRect(), &painter);
     d_->handle_pixmap_->draw(handleRect().toRect(), &painter);
+}
+
+QRectF QmImageSlider::boxRect() const
+{
+    if (!d_->aspect_ratio_) {
+        return rect();
+    }
+    QRectF box_rect = d_->box_pixmap_->rect();
+
+    qreal ratio = 1;
+    if (box_rect.width() > box_rect.height()) {
+        ratio = width() / box_rect.width();
+    } else {
+        ratio = height() / box_rect.height();
+    }
+
+    QSizeF min_size = minimumSizeHint();
+    box_rect.setWidth(qMax(box_rect.width() * ratio, min_size.width()));
+    box_rect.setHeight(qMax(box_rect.height() * ratio, min_size.height()));
+    box_rect.moveCenter(this->rect().center());
+
+    return box_rect;
 }
 
 QRectF QmImageSlider::handleRect() const
 {
-    const QRectF& rect = this->rect();
+    const QRectF& rect = boxRect();
     const QRectF& box_rect = d_->box_pixmap_->rect();
     const QRectF& box_inner = d_->box_pixmap_->innerRect();
     const QRectF& handle_rect = d_->handle_pixmap_->rect();
@@ -134,6 +192,8 @@ QRectF QmImageSlider::handleRect() const
     handle_target.setWidth(handle_target.width() + handle_fixed_width);
     handle_target.setTop(handle_target.top() - handle_inner.top());
     handle_target.setBottom(handle_target.bottom() + (handle_rect.bottom() - handle_inner.bottom()));
+
+    handle_target.moveLeft(this->rect().center().x() - handle_target.width() / 2.0);
 
     return handle_target;
 }

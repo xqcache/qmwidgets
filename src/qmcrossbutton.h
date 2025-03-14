@@ -50,6 +50,7 @@ public:
 
 signals:
     void clicked(ClickedArea area);
+    void buttonPressed(ClickedArea area);
 
 public slots:
     // 主动触发点击

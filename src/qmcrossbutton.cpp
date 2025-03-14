@@ -228,6 +228,7 @@ void QmCrossButton::mousePressEvent(QMouseEvent* event)
     if (clicked_area != ClickedArea::None) {
         d_->pressed_ = true;
         emit clicked(clicked_area);
+        emit buttonPressed(clicked_area);
     }
     if (d_->repeat_timer_->isActive()) {
         d_->repeat_timer_->stop();

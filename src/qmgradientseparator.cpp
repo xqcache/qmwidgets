@@ -7,28 +7,34 @@ QmGradientSeparator::QmGradientSeparator(QWidget* parent)
 {
     setAttribute(Qt::WA_StyledBackground, true);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+
+    // 在styleSheet中配置
+    // background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 #d9d6d6, stop:0.8 #262626, stop:1 #262626);
 }
 
 QSize QmGradientSeparator::sizeHint() const
 {
-    return QSize(10, 100);
+    return QSize(2 * line_width_, 100);
 }
 
 QSize QmGradientSeparator::minimumSizeHint() const
 {
-    return QSize(5, 30);
+    return QSize(line_width_, 30);
+}
+
+void QmGradientSeparator::setLineWidth(int width)
+{
+    line_width_ = width;
 }
 
 void QmGradientSeparator::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     QRect rect = this->rect();
-
-    QRect gradient_line_rect(rect.right()-3, rect.y(), 3, rect.height()); // 分隔线区域
-    QLinearGradient gradient(gradient_line_rect.topLeft(), gradient_line_rect.bottomRight());
-    gradient.setColorAt(0.0, QColor(37, 37, 37, 0)); // 左端透明
-    gradient.setColorAt(0.2, QColor(37, 37, 37, 255)); // 中间灰色
-    gradient.setColorAt(0.8, QColor(37, 37, 37, 255)); // 中间灰色
-    gradient.setColorAt(1.0, QColor(37, 37, 37, 0)); // 右端透明
-    painter.fillRect(gradient_line_rect, gradient);
+    initPainter(&painter);
+    QRect target_rect(rect.right() - line_width_, rect.y(), line_width_, rect.height()); // 分隔线区域
+    target_rect.moveCenter(rect.center());
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(target_rect);
 }

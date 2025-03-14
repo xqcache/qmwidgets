@@ -3,6 +3,7 @@
 #include "qmwidgets_global.h"
 #include <QFrame>
 
+class QmNinePatchPixmap;
 class QmImageSliderPrivate;
 
 class QMWIDGETS_EXPORT QmImageSlider : public QFrame {
@@ -15,11 +16,17 @@ public:
     ~QmImageSlider() noexcept override;
 
     QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     void setValue(float value);
     void setRange(float minimum, float maximum);
     void setMinimum(float v);
     void setMaximum(float v);
+
+    void setBoxPixmap(QmNinePatchPixmap* pixmap);
+    void setHandlePixmap(QmNinePatchPixmap* pixmap);
+    void setInteractivePadding(const QMarginsF& paddings);
+    void setScaleAspectRatio(bool enable);
 
     float value() const;
     float minimum() const;
@@ -38,6 +45,7 @@ protected:
     bool isPressed() const;
 
 private:
+    QRectF boxRect() const;
     QRectF handleRect() const;
     QRectF handleInteractiveRect() const;
 
