@@ -36,8 +36,6 @@ target_link_libraries(${TARGET_NAME} PRIVATE
 set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
 
 # target_precompile_headers(${TARGET_NAME} PRIVATE "stdafx.h")
-target_compile_definitions(${TARGET_NAME} PRIVATE BUILD_STATIC)
-
 if(BUILD_QRCODEVIEW)
     target_sources(${TARGET_NAME} PRIVATE qmqrcodeviewplugin.h qmqrcodeviewplugin.cpp)
 endif()

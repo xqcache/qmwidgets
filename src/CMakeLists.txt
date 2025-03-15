@@ -14,7 +14,7 @@ if(BUILD_SHARED_LIBS)
     target_compile_definitions(${TARGET_NAME} PRIVATE QMWIDGETS_COMPILE_LIB)
 else()
     add_library(${TARGET_NAME} STATIC)
-    target_compile_definitions(${TARGET_NAME} PUBLIC BUILD_STATIC)
+    target_compile_definitions(${TARGET_NAME} PUBLIC QMWIDGETS_BUILD_STATIC)
 endif()
 
 target_link_libraries(${TARGET_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)

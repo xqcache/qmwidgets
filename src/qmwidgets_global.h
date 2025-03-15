@@ -2,7 +2,7 @@
 
 #include <QtCore/qglobal.h>
 
-#ifndef BUILD_STATIC
+#ifndef QMWIDGETS_BUILD_STATIC
 #define QMWIDGETS_INITIALIZE_RESOURCE
 #if defined(QMWIDGETS_COMPILE_LIB)
 #define QMWIDGETS_EXPORT Q_DECL_EXPORT

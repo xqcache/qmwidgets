@@ -57,7 +57,7 @@ void QmTitleContainer::setTitleWidget(QWidget* widget)
     if (!widget) {
         return;
     }
-    if (!d_->title_widget) {
+    if (d_->title_widget) {
         d_->layout->removeWidget(d_->title_widget);
         d_->title_widget->deleteLater();
     }
