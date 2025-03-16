@@ -1,19 +1,18 @@
 #pragma once
 
-#include <QtWidgets/QWidget>
 #include "ui_mainwindow.h"
+#include <QtWidgets/QWidget>
 
-class MainWindow : public QWidget
-{
-	Q_OBJECT
+class MainWindow : public QWidget {
+    Q_OBJECT
 
 public:
-	MainWindow(QWidget *parent = Q_NULLPTR);
+    MainWindow(QWidget* parent = Q_NULLPTR);
 
 private Q_SLOTS:
-//	void on_widget_valueChanged(double value);
-	//void on_widget_toggled(bool checked);
+    //	void on_widget_valueChanged(double value);
+    // void on_widget_toggled(bool checked);
 
 private:
-	Ui::MainWindowClass ui;
+    Ui::MainWindowClass ui;
 };

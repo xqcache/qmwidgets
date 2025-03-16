@@ -72,3 +72,11 @@ if(BUILD_QMWIDGETS_QRCODEVIEW)
     target_sources(${TARGET_NAME} PRIVATE qmqrcodeview.cpp qmqrcodeview.h)
     target_link_libraries(${TARGET_NAME} PRIVATE qrencode)
 endif()
+
+if(BUILD_QMWIDGETS_HARDWARE_MONITOR)
+    target_sources(${TARGET_NAME} PRIVATE qmhardwareinfo.h)
+
+    if(WIN32)
+        target_sources(${TARGET_NAME} PRIVATE qmhardwareinfo_win.cpp)
+    endif()
+endif()
