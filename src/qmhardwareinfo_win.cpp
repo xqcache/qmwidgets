@@ -7,13 +7,26 @@
 #include <Pdh.h>
 // clang-format on
 
-namespace {
-std::mutex g_mutex;
-PDH_HQUERY g_cpu_query = nullptr;
-PDH_HCOUNTER g_cpu_counter = nullptr;
-} // namespace
+struct QmHardwareInfoPrivate {
+    std::mutex mutex;
+    PDH_HQUERY query = nullptr;
+    PDH_HCOUNTER cpu_counter = nullptr;
+};
 
-int64_t QmHardwareInfo::totalMemorySize()
+QmHardwareInfo::QmHardwareInfo()
+    : d_(new QmHardwareInfoPrivate)
+{
+}
+
+QmHardwareInfo::~QmHardwareInfo() noexcept
+{
+    if (d_->query) {
+        PdhCloseQuery(d_->query);
+    }
+    delete d_;
+}
+
+int64_t QmHardwareInfo::totalMemorySize() const
 {
     MEMORYSTATUSEX mem_info;
     mem_info.dwLength = sizeof(MEMORYSTATUSEX);
@@ -21,7 +34,7 @@ int64_t QmHardwareInfo::totalMemorySize()
     return mem_info.ullTotalPhys;
 }
 
-int64_t QmHardwareInfo::totalMemoryAvail()
+int64_t QmHardwareInfo::totalMemoryAvail() const
 {
     MEMORYSTATUSEX mem_info;
     mem_info.dwLength = sizeof(MEMORYSTATUSEX);
@@ -29,7 +42,7 @@ int64_t QmHardwareInfo::totalMemoryAvail()
     return mem_info.ullAvailPhys;
 }
 
-std::int64_t QmHardwareInfo::totalMemoryUsed()
+std::int64_t QmHardwareInfo::totalMemoryUsed() const
 {
     MEMORYSTATUSEX mem_info;
     mem_info.dwLength = sizeof(MEMORYSTATUSEX);
@@ -37,19 +50,28 @@ std::int64_t QmHardwareInfo::totalMemoryUsed()
     return mem_info.ullTotalPhys - mem_info.ullAvailPhys;
 }
 
-double QmHardwareInfo::totalCpuUsage()
+double QmHardwareInfo::totalMemoryUsage() const
 {
-    std::unique_lock<std::mutex> lock(g_mutex);
-    if (!g_cpu_query) {
-        PdhOpenQuery(NULL, NULL, &g_cpu_query);
-        // You can also use L"\\Processor(*)\\% Processor Time" and get individual CPU values with PdhGetFormattedCounterArray()
-        PdhAddEnglishCounter(g_cpu_query, L"\\Processor(_Total)\\% Processor Time", NULL, &g_cpu_counter);
-        PdhCollectQueryData(g_cpu_query);
+    MEMORYSTATUSEX mem_info;
+    mem_info.dwLength = sizeof(MEMORYSTATUSEX);
+    GlobalMemoryStatusEx(&mem_info);
 
-        // TODO: 需要关闭查询释放资源，可能不能使用静态类
+    return 100.0 * (mem_info.ullTotalPhys - mem_info.ullAvailPhys) / mem_info.ullTotalPhys;
+}
+
+double QmHardwareInfo::totalCpuUsage() const
+{
+    std::unique_lock<std::mutex> lock(d_->mutex);
+
+    if (!d_->query) {
+        PdhOpenQuery(NULL, NULL, &d_->query);
+    }
+    if (!d_->cpu_counter) {
+        PdhAddEnglishCounter(d_->query, L"\\Processor(_Total)\\% Processor Time", NULL, &(d_->cpu_counter));
+        PdhCollectQueryData(d_->query);
     }
     PDH_FMT_COUNTERVALUE value;
-    PdhCollectQueryData(g_cpu_query);
-    PdhGetFormattedCounterValue(g_cpu_counter, PDH_FMT_DOUBLE, NULL, &value);
+    PdhCollectQueryData(d_->query);
+    PdhGetFormattedCounterValue(d_->cpu_counter, PDH_FMT_DOUBLE, NULL, &value);
     return value.doubleValue;
 }

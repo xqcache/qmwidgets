@@ -14,10 +14,17 @@ MainWindow::MainWindow(QWidget* parent)
     ui.frame->setMiddleValue(0);
     ui.frame->setAnimated(true);
 
+    hardware_info_ = new QmHardwareInfo();
+
     auto* timer = new QTimer(this);
     timer->setInterval(1000);
-    timer->callOnTimeout([] { qDebug() << QmHardwareInfo::totalCpuUsage(); });
+    timer->callOnTimeout([this] { qDebug() << hardware_info_->totalCpuUsage() << hardware_info_->totalMemoryUsage(); });
     timer->start();
+}
+
+MainWindow::~MainWindow() noexcept
+{
+    delete hardware_info_;
 }
 
 // void MainWindow::on_widget_toggled(bool checked)

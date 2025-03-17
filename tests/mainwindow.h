@@ -3,11 +3,14 @@
 #include "ui_mainwindow.h"
 #include <QtWidgets/QWidget>
 
+class QmHardwareInfo;
+
 class MainWindow : public QWidget {
     Q_OBJECT
 
 public:
     MainWindow(QWidget* parent = Q_NULLPTR);
+    ~MainWindow() noexcept override;
 
 private Q_SLOTS:
     //	void on_widget_valueChanged(double value);
@@ -15,4 +18,5 @@ private Q_SLOTS:
 
 private:
     Ui::MainWindowClass ui;
+    QmHardwareInfo* hardware_info_ { nullptr };
 };
