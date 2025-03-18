@@ -38,7 +38,7 @@ QmTitleContainer::~QmTitleContainer() noexcept
     delete d_;
 }
 
-void QmTitleContainer::setTitle(const QString& text)
+void QmTitleContainer::setTitleText(const QString& text)
 {
     if (auto* lbl_title = qobject_cast<QLabel*>(d_->title_widget); lbl_title) {
         lbl_title->setText(text);
@@ -85,6 +85,14 @@ void QmTitleContainer::setWidget(QWidget* widget)
 QWidget* QmTitleContainer::widget() const
 {
     return d_->widget;
+}
+
+QString QmTitleContainer::titleText() const
+{
+    if (auto* lbl_title = qobject_cast<QLabel*>(d_->title_widget); lbl_title) {
+        return lbl_title->text();
+    }
+    return "";
 }
 
 Qt::Alignment QmTitleContainer::titleAlignment() const
