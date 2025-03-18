@@ -1,9 +1,10 @@
 #pragma once
 
+#include "qmwidgets_global.h"
 #include <QWidget>
 
 class QLabel;
-class QmDynamicMessage : public QWidget {
+class QMWIDGETS_EXPORT QmDynamicMessage : public QWidget {
 public:
     static void info(QWidget* parent, const QString& title, const QString& content, int timeout = 4000);
     static void warn(QWidget* parent, const QString& title, const QString& content, int timeout = 4000);
