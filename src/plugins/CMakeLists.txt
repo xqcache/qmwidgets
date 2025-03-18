@@ -27,6 +27,8 @@ add_library(${TARGET_NAME} SHARED
     qmimagesliderplugin.cpp
     qmcrossbuttonplugin.h
     qmcrossbuttonplugin.cpp
+    qmtitlecontainerplugin.h
+    qmtitlecontainerplugin.cpp
 )
 target_link_libraries(${TARGET_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
@@ -38,4 +40,8 @@ set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
 # target_precompile_headers(${TARGET_NAME} PRIVATE "stdafx.h")
 if(BUILD_QRCODEVIEW)
     target_sources(${TARGET_NAME} PRIVATE qmqrcodeviewplugin.h qmqrcodeviewplugin.cpp)
+endif()
+
+if(QMWIDGET_INSTALL)
+    install(TARGETS ${TARGET_NAME} DESTINATION plugins/designer)
 endif()

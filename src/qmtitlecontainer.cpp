@@ -81,3 +81,16 @@ void QmTitleContainer::setWidget(QWidget* widget)
     d_->widget->setParent(this);
     d_->layout->addWidget(d_->widget);
 }
+
+QWidget* QmTitleContainer::widget() const
+{
+    return d_->widget;
+}
+
+Qt::Alignment QmTitleContainer::titleAlignment() const
+{
+    if (auto* lbl_title = qobject_cast<QLabel*>(d_->title_widget); lbl_title) {
+        return lbl_title->alignment();
+    }
+    return Qt::AlignCenter;
+}

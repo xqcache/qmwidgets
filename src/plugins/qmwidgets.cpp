@@ -7,6 +7,7 @@
 #include "qmimagesliderplugin.h"
 #include "qmswitchplugin.h"
 #include "qmthermometerplugin.h"
+#include "qmtitlecontainerplugin.h"
 #include "stdafx.h"
 
 QmWidgets::QmWidgets(QObject* parent /*= Q_NULLPTR*/)
@@ -19,6 +20,7 @@ QmWidgets::QmWidgets(QObject* parent /*= Q_NULLPTR*/)
     m_widgets.append(new QmImageAnalogClockPlugin(this));
     m_widgets.append(new QmImageSliderPlugin(this));
     m_widgets.append(new QmCrossButtonPlugin(this));
+    m_widgets.append(new QmTitleContainerPlugin(this));
 }
 
 QList<QDesignerCustomWidgetInterface*> QmWidgets::customWidgets() const

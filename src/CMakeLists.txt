@@ -80,3 +80,7 @@ if(BUILD_QMWIDGETS_HARDWARE_MONITOR)
         target_sources(${TARGET_NAME} PRIVATE qmhardwareinfo_win.cpp)
     endif()
 endif()
+
+if(QMWIDGET_INSTALL)
+    install(TARGETS ${TARGET_NAME} DESTINATION bin)
+endif()
