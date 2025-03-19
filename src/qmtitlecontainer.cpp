@@ -17,7 +17,7 @@ struct QmTitleContainerPrivate {
 
         auto* label = new QLabel(QmTitleContainer::tr("Unnamed"), continer);
         label->setProperty("Style", "Title");
-        label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         label->setAlignment(Qt::AlignCenter);
 
         title_widget = label;
