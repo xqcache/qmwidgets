@@ -18,7 +18,10 @@ MainWindow::MainWindow(QWidget* parent)
 
     auto* timer = new QTimer(this);
     timer->setInterval(1000);
-    timer->callOnTimeout([this] { qDebug() << hardware_info_->totalCpuUsage() << hardware_info_->totalMemoryUsage(); });
+    timer->callOnTimeout([this] {
+        qDebug() << hardware_info_->totalCpuUsage() << hardware_info_->totalMemoryUsage() << hardware_info_->driveUsage("D:")
+                 << QLocale::system().formattedDataSize(hardware_info_->driveTotalBytes("D:")) << hardware_info_->driveList().join(", ");
+    });
     timer->start();
 }
 

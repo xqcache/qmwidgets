@@ -10,12 +10,18 @@ public:
     QmHardwareInfo();
     ~QmHardwareInfo() noexcept;
 
-    std::int64_t totalMemorySize() const;
-    std::int64_t totalMemoryAvail() const;
-    std::int64_t totalMemoryUsed() const;
+    static qint64 totalMemorySize();
+    static qint64 totalMemoryAvail();
+    static qint64 totalMemoryUsed();
 
     double totalMemoryUsage() const;
     double totalCpuUsage() const;
+
+    static QStringList driveList();
+    static qint64 driveUsedBytes(const QString& drive);
+    static qint64 driveFreeBytes(const QString& drive);
+    static qint64 driveTotalBytes(const QString& drive);
+    static double driveUsage(const QString& drive);
 
 private:
     QmHardwareInfoPrivate* d_ { nullptr };
