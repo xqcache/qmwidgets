@@ -159,15 +159,13 @@ void QmSwitch::paintEvent(QPaintEvent* event)
 {
     QPainter p(this);
 
-    p.setPen(Qt::NoPen);
-    p.setBrush(Qt::NoBrush);
     p.setRenderHint(QPainter::Antialiasing);
+    initPainter(&p);
 
     QRectF r = rect();
-
     QColor handleColor;
-
     p.save();
+    p.setPen(Qt::NoPen);
     if (d->checked) {
         p.setBrush(d->checkedBgColor);
         handleColor = d->checkedHandleColor;
@@ -176,18 +174,16 @@ void QmSwitch::paintEvent(QPaintEvent* event)
         handleColor = d->uncheckedHandleColor;
     }
     p.drawRoundedRect(r, d->rectRadius, d->rectRadius);
-    p.restore();
 
-    p.save();
     QRectF handleRect = QRectF(d->handlePos, QSizeF(r.width() / 2, r.height())).adjusted(d->padding, d->padding, -d->padding, -d->padding);
     p.setBrush(handleColor);
     p.drawRoundedRect(handleRect, d->rectRadius - d->padding, d->rectRadius - d->padding);
+    p.restore();
+
     auto text = d->checked ? d->checked_text : d->unchecked_text;
     if (!text.isEmpty()) {
-        p.setPen(isChecked() ? QColor("#252525") : QColor(Qt::white));
         p.drawText(handleRect, Qt::AlignCenter, text);
     }
-    p.restore();
 }
 
 void QmSwitch::mousePressEvent(QMouseEvent* event)
