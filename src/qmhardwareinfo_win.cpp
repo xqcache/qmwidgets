@@ -50,7 +50,7 @@ qint64 QmHardwareInfo::totalMemoryUsed()
     return mem_info.ullTotalPhys - mem_info.ullAvailPhys;
 }
 
-double QmHardwareInfo::totalMemoryUsage() const
+double QmHardwareInfo::totalMemoryUsage()
 {
     MEMORYSTATUSEX mem_info;
     mem_info.dwLength = sizeof(MEMORYSTATUSEX);

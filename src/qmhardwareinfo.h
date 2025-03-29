@@ -14,7 +14,7 @@ public:
     static qint64 totalMemoryAvail();
     static qint64 totalMemoryUsed();
 
-    double totalMemoryUsage() const;
+    static double totalMemoryUsage();
     double totalCpuUsage() const;
 
     static QStringList driveList();
