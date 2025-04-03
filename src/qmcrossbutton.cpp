@@ -227,7 +227,6 @@ void QmCrossButton::mousePressEvent(QMouseEvent* event)
     auto clicked_area = d_->clickedArea(event->pos());
     if (clicked_area != ClickedArea::None) {
         d_->pressed_ = true;
-        emit clicked(clicked_area);
         emit buttonPressed(clicked_area);
     }
     if (d_->repeat_timer_->isActive()) {
@@ -246,8 +245,10 @@ void QmCrossButton::mousePressEvent(QMouseEvent* event)
 
 void QmCrossButton::mouseReleaseEvent(QMouseEvent* event)
 {
+    if (!d_->repeat_timer_->isActive() && d_->pressed_) {
+        emit clicked(d_->clickedArea(event->pos()));
+    }
     d_->repeat_timer_->stop();
-
     d_->pressed_ = false;
     update();
 }
