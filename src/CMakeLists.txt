@@ -56,6 +56,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmdynamicmessage.cpp
     qmtitlecontainer.h
     qmtitlecontainer.cpp
+    qmblinklabel.h
+    qmblinklabel.cpp
 )
 
 if(TAKEOVER_WIN32_HTCAPTION_EVENT)
