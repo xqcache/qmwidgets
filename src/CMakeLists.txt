@@ -18,7 +18,7 @@ else()
 endif()
 
 target_link_libraries(${TARGET_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
-target_precompile_headers(${TARGET_NAME} PUBLIC "stdafx.h")
+target_precompile_headers(${TARGET_NAME} PRIVATE "stdafx.h")
 target_include_directories(${TARGET_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
 target_sources(${TARGET_NAME} PRIVATE
@@ -58,6 +58,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmtitlecontainer.cpp
     qmblinklabel.h
     qmblinklabel.cpp
+    qmshadowhelperwidget.h
+    qmshadowhelperwidget.cpp
 )
 
 if(TAKEOVER_WIN32_HTCAPTION_EVENT)
