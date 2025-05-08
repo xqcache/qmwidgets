@@ -8,7 +8,9 @@ struct QmShadowHelperWidgetPrivate;
 
 class QMWIDGETS_EXPORT QmShadowHelperWidget : public QWidget {
 public:
-    explicit QmShadowHelperWidget(QWidget* parent);
+    static QmShadowHelperWidget* generateShadow(
+        QWidget* widget, qreal blur_radius = 10, qreal offset = 0, const QColor& shadow_color = Qt::black);
+
     ~QmShadowHelperWidget() noexcept override;
 
     void setColor(const QColor& color);
@@ -24,6 +26,9 @@ public:
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+
+private:
+    explicit QmShadowHelperWidget(QWidget* parent);
 
 private:
     QmShadowHelperWidgetPrivate* d_ { nullptr };

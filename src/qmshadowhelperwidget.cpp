@@ -18,18 +18,19 @@ QmShadowHelperWidget::QmShadowHelperWidget(QWidget* parent)
     : QWidget(parent)
     , d_(new QmShadowHelperWidgetPrivate)
 {
-    if (auto* layout = parent->layout(); layout) {
-        layout->setContentsMargins(25, 25, 25, 25);
-    }
     d_->parent_size = parent->size();
-    parent->installEventFilter(this);
-
     d_->effect = new QGraphicsDropShadowEffect(this);
     d_->effect->setColor(Qt::black);
-    d_->effect->setBlurRadius(20);
+    d_->effect->setBlurRadius(10);
     d_->effect->setOffset(0);
     setGraphicsEffect(d_->effect);
     lower();
+
+    if (auto* layout = parent->layout(); layout) {
+        qreal layout_margin = d_->effect->blurRadius() + 3;
+        layout->setContentsMargins(layout_margin, layout_margin, layout_margin, layout_margin);
+    }
+    parent->installEventFilter(this);
 }
 
 QmShadowHelperWidget::~QmShadowHelperWidget() noexcept
@@ -45,6 +46,10 @@ void QmShadowHelperWidget::setColor(const QColor& color)
 void QmShadowHelperWidget::setBlurRadius(qreal radius)
 {
     d_->effect->setBlurRadius(radius);
+    if (auto* layout = parentWidget()->layout(); layout) {
+        qreal layout_margin = d_->effect->blurRadius() + 3;
+        layout->setContentsMargins(layout_margin, layout_margin, layout_margin, layout_margin);
+    }
 }
 
 void QmShadowHelperWidget::setOffset(qreal d)
@@ -99,4 +104,16 @@ void QmShadowHelperWidget::paintEvent(QPaintEvent* event)
         shadow_rect.adjust(half_pen_width, half_pen_width, -half_pen_width, -half_pen_width);
     }
     painter.drawRoundedRect(shadow_rect, d_->border_radius.x(), d_->border_radius.y());
+}
+QmShadowHelperWidget* QmShadowHelperWidget::generateShadow(QWidget* widget, qreal blur_radius, qreal offset, const QColor& shadow_color)
+{
+    if (!widget->layout()) {
+        assert(0 && "QmShadowHelperWidget: QWidget must have a layout!");
+        return nullptr;
+    }
+    auto* shadow_widget = new QmShadowHelperWidget(widget);
+    shadow_widget->setBlurRadius(blur_radius);
+    shadow_widget->setOffset(offset);
+    shadow_widget->setColor(shadow_color);
+    return shadow_widget;
 }
