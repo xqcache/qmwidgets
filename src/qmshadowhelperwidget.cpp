@@ -7,18 +7,18 @@
 #include <QScrollArea>
 
 struct QmShadowHelperWidgetPrivate {
+    QWidget* target = nullptr;
     QGraphicsDropShadowEffect* effect { nullptr };
-    QSize parent_size;
     QBrush background_brush { Qt::white };
     QPen border_pen { Qt::white };
     QPointF border_radius { 0, 0 };
 };
 
-QmShadowHelperWidget::QmShadowHelperWidget(QWidget* parent)
-    : QWidget(parent)
+QmShadowHelperWidget::QmShadowHelperWidget(QWidget* target)
+    : QWidget(target)
     , d_(new QmShadowHelperWidgetPrivate)
 {
-    d_->parent_size = parent->size();
+    d_->target = target;
     d_->effect = new QGraphicsDropShadowEffect(this);
     d_->effect->setColor(Qt::black);
     d_->effect->setBlurRadius(10);
@@ -26,16 +26,23 @@ QmShadowHelperWidget::QmShadowHelperWidget(QWidget* parent)
     setGraphicsEffect(d_->effect);
     lower();
 
-    if (auto* layout = parent->layout(); layout) {
-        qreal layout_margin = d_->effect->blurRadius() + 3;
-        layout->setContentsMargins(layout_margin, layout_margin, layout_margin, layout_margin);
-    }
-    parent->installEventFilter(this);
+    updateParentLayout();
+
+    target->installEventFilter(this);
+    target->adjustSize();
 }
 
 QmShadowHelperWidget::~QmShadowHelperWidget() noexcept
 {
     delete d_;
+}
+
+void QmShadowHelperWidget::updateParentLayout()
+{
+    if (auto* layout = parentWidget()->layout(); layout) {
+        qreal layout_margin = qMax(qMax(d_->border_radius.x(), d_->border_radius.y()) / 2.0, d_->effect->blurRadius() + 3);
+        layout->setContentsMargins(layout_margin, layout_margin, layout_margin, layout_margin);
+    }
 }
 
 void QmShadowHelperWidget::setColor(const QColor& color)
@@ -46,10 +53,7 @@ void QmShadowHelperWidget::setColor(const QColor& color)
 void QmShadowHelperWidget::setBlurRadius(qreal radius)
 {
     d_->effect->setBlurRadius(radius);
-    if (auto* layout = parentWidget()->layout(); layout) {
-        qreal layout_margin = d_->effect->blurRadius() + 3;
-        layout->setContentsMargins(layout_margin, layout_margin, layout_margin, layout_margin);
-    }
+    updateParentLayout();
 }
 
 void QmShadowHelperWidget::setOffset(qreal d)
@@ -72,6 +76,7 @@ void QmShadowHelperWidget::setBorderPen(const QPen& pen)
 void QmShadowHelperWidget::setBorderRadius(qreal x_radius, qreal y_radius)
 {
     d_->border_radius = QPointF(x_radius, y_radius);
+    updateParentLayout();
 }
 
 qreal QmShadowHelperWidget::blurRadius() const
@@ -83,7 +88,6 @@ bool QmShadowHelperWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::Resize) {
         auto* resize_evt = static_cast<QResizeEvent*>(event);
-        d_->parent_size = resize_evt->size();
         qreal shadow_padding = blurRadius() + 2;
         setGeometry(shadow_padding / 2.0, shadow_padding / 2.0, resize_evt->size().width() - shadow_padding,
             resize_evt->size().height() - shadow_padding);

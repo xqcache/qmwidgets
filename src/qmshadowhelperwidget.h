@@ -2,6 +2,8 @@
 
 #include "qmwidgets_global.h"
 
+#include <QBrush>
+#include <QPen>
 #include <QWidget>
 
 struct QmShadowHelperWidgetPrivate;
@@ -29,6 +31,7 @@ protected:
 
 private:
     explicit QmShadowHelperWidget(QWidget* parent);
+    void updateParentLayout();
 
 private:
     QmShadowHelperWidgetPrivate* d_ { nullptr };
