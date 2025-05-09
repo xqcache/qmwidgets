@@ -107,11 +107,23 @@ void QmShadowHelperWidget::paintEvent(QPaintEvent* event)
 }
 QmShadowHelperWidget* QmShadowHelperWidget::generateShadow(QWidget* widget, qreal blur_radius, qreal offset, const QColor& shadow_color)
 {
+    auto* shadow_target = widget;
     if (!widget->layout()) {
-        assert(0 && "QmShadowHelperWidget: QWidget must have a layout!");
-        return nullptr;
+        if (auto* parent_widget = widget->parentWidget(); parent_widget && parent_widget->property("Usage").toString() == "ShadowEffect") {
+            shadow_target = parent_widget;
+        } else {
+            auto* container = new QWidget(parent_widget);
+            if (parent_widget && parent_widget->layout()) {
+                parent_widget->layout()->replaceWidget(widget, container);
+            }
+            container->setProperty("Usage", "ShadowEffect");
+            widget->setParent(container);
+            auto* layout = new QHBoxLayout(container);
+            layout->addWidget(widget);
+            shadow_target = container;
+        }
     }
-    auto* shadow_widget = new QmShadowHelperWidget(widget);
+    auto* shadow_widget = new QmShadowHelperWidget(shadow_target);
     shadow_widget->setBlurRadius(blur_radius);
     shadow_widget->setOffset(offset);
     shadow_widget->setColor(shadow_color);
