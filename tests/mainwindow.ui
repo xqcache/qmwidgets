@@ -13,36 +13,36 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <widget class="QmAutoReturnSlider" name="frame">
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-     </widget>
-     <widget class="QmImageSlider" name="slider"/>
-    </widget>
-   </item>
-  </layout>
+  <widget class="QmCollapsibleWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>280</y>
+     <width>371</width>
+     <height>231</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget [Style=&quot;Title&quot;] {
+	background: gray;
+}
+
+QWidget [Style=&quot;Title&quot;] &gt; QToolButton {
+	border: none;
+}
+
+QWidget [Style=&quot;Title&quot;] &gt; QToolButton:hover {
+	background: lightgray;
+}</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QmImageSlider</class>
-   <extends>QFrame</extends>
-   <header>qmimageslider.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QmAutoReturnSlider</class>
-   <extends>QmImageSlider</extends>
-   <header>qmautoreturnslider.h</header>
+   <class>QmCollapsibleWidget</class>
+   <extends>QWidget</extends>
+   <header>qmcollapsiblewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

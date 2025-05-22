@@ -18,5 +18,4 @@ private Q_SLOTS:
 
 private:
     Ui::MainWindowClass ui;
-    QmHardwareInfo* hardware_info_ { nullptr };
 };
