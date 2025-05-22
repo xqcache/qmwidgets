@@ -16,6 +16,7 @@ QmCollapsibleWidget::QmCollapsibleWidget(QWidget* parent)
     : QWidget(parent)
     , d_(new QmCollapsibleWidgetPrivate)
 {
+    setAttribute(Qt::WA_StyledBackground);
     initUi();
     setupSignals();
 }
@@ -80,11 +81,11 @@ void QmCollapsibleWidget::initUi()
     QVBoxLayout* lyt_main = new QVBoxLayout(this);
     lyt_main->addWidget(wgt_top);
     lyt_main->addWidget(d_->widget);
-    lyt_main->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Preferred, QSizePolicy::Expanding));
+
+    lyt_main->setAlignment(Qt::AlignTop);
 
     lyt_main->setContentsMargins(0, 0, 0, 0);
     lyt_main->setSpacing(0);
-    lyt_main->setStretch(1, 1);
 }
 
 void QmCollapsibleWidget::setupSignals()
@@ -99,7 +100,12 @@ void QmCollapsibleWidget::collapse()
     anim->setStartValue(d_->widget->height());
     anim->setEndValue(0);
     anim->setDuration(300);
-    connect(anim, &QPropertyAnimation::finished, anim, &QObject::deleteLater);
+    anim->setEasingCurve(QEasingCurve::OutSine);
+
+    connect(anim, &QPropertyAnimation::finished, anim, [anim, this] {
+        anim->deleteLater();
+        d_->widget->setVisible(false);
+    });
     anim->start();
 }
 
@@ -107,9 +113,11 @@ void QmCollapsibleWidget::expand()
 {
     QPropertyAnimation* anim = new QPropertyAnimation(d_->widget, "maximumHeight", this);
     int height = d_->widget->property("heightBackup").toInt();
+    d_->widget->setVisible(true);
     anim->setStartValue(0);
     anim->setEndValue(height);
     anim->setDuration(300);
+    anim->setEasingCurve(QEasingCurve::OutSine);
     connect(anim, &QPropertyAnimation::finished, anim, [anim, height, this] {
         d_->widget->setMaximumHeight(d_->widget->maximumWidth());
         anim->deleteLater();
