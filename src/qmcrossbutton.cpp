@@ -43,6 +43,7 @@ private:
     bool pressed_ { false };
 
     QPixmap* curr_pixmap_ { nullptr };
+    QPixmap disabled_pixmap;
     QmCrossButton::ClickedArea curr_area_ { QmCrossButton::ClickedArea::None };
     static std::map<QmCrossButton::ClickedArea, std::pair<float, float>> sFourDirectionsAngles;
     static std::map<QmCrossButton::ClickedArea, std::pair<float, float>> sEastWestAngles;
@@ -139,12 +140,16 @@ void QmCrossButtonPrivate::switchPixmap(const QPointF& pos)
 void QmCrossButtonPrivate::switchPixmap(QmCrossButton::ClickedArea clicked_area)
 {
     curr_area_ = clicked_area;
-    curr_pixmap_ = &pixmaps_[static_cast<size_t>(curr_area_)];
+    if (q_ptr->isEnabled()) {
+        curr_pixmap_ = &pixmaps_[static_cast<size_t>(curr_area_)];
+    }
 }
 
 void QmCrossButtonPrivate::setNormal()
 {
-    curr_pixmap_ = &pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)];
+    if (q_ptr->isEnabled()) {
+        curr_pixmap_ = &pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)];
+    }
 }
 
 ///////////////////////
@@ -176,7 +181,15 @@ QmCrossButton::DivisionMode QmCrossButton::divisionMode() const
 void QmCrossButton::setNormalPixmap(const QPixmap& pixmap)
 {
     d_->pixmaps_[static_cast<size_t>(QmCrossButton::ClickedArea::None)] = pixmap;
+    if (d_->disabled_pixmap.isNull()) {
+        d_->disabled_pixmap = pixmap;
+    }
     // setFixedSize(pixmap.size());
+}
+
+void QmCrossButton::setDisabledPixmap(const QPixmap& pixmap)
+{
+    d_->disabled_pixmap = pixmap;
 }
 
 void QmCrossButton::setEastClickedPixmap(const QPixmap& pixmap)
@@ -220,6 +233,19 @@ QSize QmCrossButton::minimumSizeHint() const
 void QmCrossButton::click(ClickedArea area)
 {
     emit clicked(area);
+}
+
+bool QmCrossButton::event(QEvent* event)
+{
+    if (event->type() == QEvent::EnabledChange) {
+        if (!isEnabled()) {
+            d_->curr_pixmap_ = &d_->disabled_pixmap;
+        } else {
+            d_->curr_pixmap_ = &d_->pixmaps_[static_cast<size_t>(d_->curr_area_)];
+        }
+        update();
+    }
+    return QFrame::event(event);
 }
 
 void QmCrossButton::mousePressEvent(QMouseEvent* event)

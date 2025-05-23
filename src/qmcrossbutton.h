@@ -33,6 +33,7 @@ public:
     DivisionMode divisionMode() const;
 
     void setNormalPixmap(const QPixmap& pixmap);
+    void setDisabledPixmap(const QPixmap& pixmap);
     void setEastClickedPixmap(const QPixmap& pixmap);
     void setSouthClickedPixmap(const QPixmap& pixmap);
     void setWestClickedPixmap(const QPixmap& pixmap);
@@ -57,6 +58,7 @@ public slots:
     void click(ClickedArea area);
 
 protected:
+    bool event(QEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
