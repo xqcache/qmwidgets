@@ -344,3 +344,8 @@ void QmCrossButton::setInteractiveIgnored(const QPainterPath& area)
 {
     d_->ignored_area_ = area;
 }
+
+QRectF QmCrossButton::actualRect() const
+{
+    return d_->buttonRect();
+}

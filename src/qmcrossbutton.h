@@ -49,6 +49,8 @@ public:
 
     void setInteractiveIgnored(const QPainterPath& area);
 
+    QRectF actualRect() const;
+
 signals:
     void clicked(ClickedArea area);
     void buttonPressed(ClickedArea area);
