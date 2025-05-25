@@ -4,6 +4,7 @@
 
 struct QmImageButtonPrivate {
     bool hovered { false };
+    bool pressed { false };
 };
 
 QmImageButton::QmImageButton(QWidget* parent)
@@ -23,21 +24,46 @@ QmImageButton::~QmImageButton() noexcept
     delete d_;
 }
 
+void QmImageButton::mousePressEvent(QMouseEvent* event)
+{
+    d_->pressed = true;
+    QAbstractButton::mousePressEvent(event);
+}
+
+void QmImageButton::mouseReleaseEvent(QMouseEvent* event)
+{
+    d_->pressed = false;
+    QAbstractButton::mouseReleaseEvent(event);
+}
+
 void QmImageButton::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    int x = (width() - iconSize().width()) / 2;
-    int y = (height() - iconSize().height()) / 2;
+    QSize icon_size = iconSize();
+
+    if (d_->pressed) {
+        icon_size.setWidth(icon_size.width() - 2);
+        icon_size.setHeight(icon_size.height() - 2);
+    }
+
+    int x = (width() - icon_size.width()) / 2;
+    int y = (height() - icon_size.height()) / 2;
+
+    if (d_->pressed) {
+        x += 1;
+        y += 1;
+    }
+
     QPixmap pixmap;
 
     if (isEnabled()) {
         if (d_->hovered) {
-            pixmap = icon().pixmap(iconSize(), QIcon::Active);
+            pixmap = icon().pixmap(icon_size, QIcon::Active);
         } else {
-            pixmap = icon().pixmap(iconSize(), QIcon::Normal, (!isCheckable() || (isCheckable() && isChecked())) ? QIcon::On : QIcon::Off);
+            pixmap = icon().pixmap(icon_size, QIcon::Normal, (!isCheckable() || (isCheckable() && isChecked())) ? QIcon::On : QIcon::Off);
         }
     } else {
-        pixmap = icon().pixmap(iconSize(), QIcon::Disabled);
+        pixmap = icon().pixmap(icon_size, QIcon::Disabled);
     }
     painter.drawPixmap(x, y, pixmap);
 }
