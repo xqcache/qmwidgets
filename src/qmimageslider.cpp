@@ -86,11 +86,14 @@ void QmImageSlider::setScaleAspectRatio(bool enable)
 
 void QmImageSlider::setValue(float value)
 {
-    d_->value_ = value;
-    d_->value_ = qMax(d_->value_, d_->minimum_);
-    d_->value_ = qMin(d_->value_, d_->maximum_);
-    update();
-    emit valueChanged(d_->value_);
+    auto new_value = value;
+    new_value = qMax(new_value, d_->minimum_);
+    new_value = qMin(new_value, d_->maximum_);
+    if (!qFuzzyCompare(new_value, d_->value_)) {
+        d_->value_ = new_value;
+        update();
+        emit valueChanged(d_->value_);
+    }
 }
 
 void QmImageSlider::setRange(float minimum, float maximum)
