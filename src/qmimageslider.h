@@ -34,6 +34,7 @@ public:
 
 signals:
     void valueChanged(float value);
+    void valueChanged(int value);
     void sliderReleased();
     void sliderPressed();
 

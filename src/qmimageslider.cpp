@@ -14,6 +14,7 @@ private:
     std::unique_ptr<QmNinePatchPixmap> box_pixmap_;
     std::unique_ptr<QmNinePatchPixmap> handle_pixmap_;
 
+    int int_value_ { 0 };
     float value_ { 0.0f };
     float minimum_ { 0.0f };
     float maximum_ { 100.0f };
@@ -91,8 +92,12 @@ void QmImageSlider::setValue(float value)
     new_value = qMin(new_value, d_->maximum_);
     if (!qFuzzyCompare(new_value, d_->value_)) {
         d_->value_ = new_value;
+        emit valueChanged(new_value);
         update();
-        emit valueChanged(d_->value_);
+        if (d_->int_value_ != static_cast<int>(new_value)) {
+            d_->int_value_ = static_cast<int>(new_value);
+            emit valueChanged(d_->int_value_);
+        }
     }
 }
 
@@ -106,9 +111,15 @@ void QmImageSlider::setMinimum(float v)
 {
     d_->minimum_ = v;
     if (d_->value_ < d_->minimum_) {
-        d_->value_ = d_->minimum_;
-        update();
-        emit valueChanged(d_->value_);
+        if (!qFuzzyCompare(d_->value_, d_->minimum_)) {
+            d_->value_ = d_->minimum_;
+            emit valueChanged(d_->value_);
+            update();
+            if (d_->int_value_ != static_cast<int>(d_->minimum_)) {
+                d_->int_value_ = static_cast<int>(d_->minimum_);
+                emit valueChanged(d_->int_value_);
+            }
+        }
     }
 }
 
@@ -116,9 +127,15 @@ void QmImageSlider::setMaximum(float v)
 {
     d_->maximum_ = v;
     if (d_->value_ > d_->maximum_) {
-        d_->value_ = d_->maximum_;
-        update();
-        emit valueChanged(d_->value_);
+        if (!qFuzzyCompare(d_->value_, d_->maximum_)) {
+            d_->value_ = d_->maximum_;
+            emit valueChanged(d_->value_);
+            update();
+            if (d_->int_value_ != static_cast<int>(d_->maximum_)) {
+                d_->int_value_ = static_cast<int>(d_->maximum_);
+                emit valueChanged(d_->int_value_);
+            }
+        }
     }
 }
 
