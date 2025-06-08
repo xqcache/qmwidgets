@@ -29,6 +29,7 @@ public:
     void setScaleAspectRatio(bool enable);
 
     float value() const;
+    int intValue() const;
     float minimum() const;
     float maximum() const;
 

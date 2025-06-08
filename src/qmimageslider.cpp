@@ -271,6 +271,11 @@ void QmImageSlider::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
+int QmImageSlider::intValue() const
+{
+    return d_->int_value_;
+}
+
 bool QmImageSlider::isPressed() const
 {
     return d_->clicked_;
