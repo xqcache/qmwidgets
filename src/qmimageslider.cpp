@@ -171,14 +171,14 @@ QRectF QmImageSlider::boxRect() const
 
     qreal ratio = 1;
     if (box_rect.width() > box_rect.height()) {
-        ratio = width() / box_rect.width();
+        ratio = 1.0 * width() / box_rect.width();
     } else {
-        ratio = height() / box_rect.height();
+        ratio = 1.0 * height() / box_rect.height();
     }
 
     QSizeF min_size = minimumSizeHint();
-    box_rect.setWidth(qMax(box_rect.width() * ratio, min_size.width()));
-    box_rect.setHeight(qMax(box_rect.height() * ratio, min_size.height()));
+    box_rect.setWidth(qMin<qreal>(width(), qMax(box_rect.width() * ratio, min_size.width())));
+    box_rect.setHeight(qMin<qreal>(height(), qMax(box_rect.height() * ratio, min_size.height())));
     box_rect.moveCenter(this->rect().center());
 
     return box_rect;
