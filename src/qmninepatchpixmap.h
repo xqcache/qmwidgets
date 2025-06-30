@@ -33,8 +33,11 @@ private:
     const QPixmap& partPixmap(Part part) const;
     QRect partRect(Part part) const;
 
+    void drawPixmap(Part part, const QRect& target, QPainter* painter);
+
 private:
     QRect inner_rect_;
     QPixmap origin_;
+    QString path_;
     std::array<QPixmap, 9> pixmaps_;
 };
