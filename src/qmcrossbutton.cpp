@@ -222,7 +222,7 @@ void QmCrossButton::setClickedPixmap(const QPixmap& east, const QPixmap& south, 
 
 QSize QmCrossButton::sizeHint() const
 {
-    return QSize(100, 100);
+    return QSize(30, 30);
 }
 
 QSize QmCrossButton::minimumSizeHint() const

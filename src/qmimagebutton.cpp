@@ -24,6 +24,11 @@ QmImageButton::~QmImageButton() noexcept
     delete d_;
 }
 
+QSize QmImageButton::sizeHint() const
+{
+    return iconSize();
+}
+
 void QmImageButton::mousePressEvent(QMouseEvent* event)
 {
     d_->pressed = true;
