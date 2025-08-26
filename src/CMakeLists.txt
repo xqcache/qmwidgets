@@ -66,6 +66,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmimagebutton.cpp
     qmimageshadowwidget.h
     qmimageshadowwidget.cpp
+    qmasyncblockerwidget.h
+    qmasyncblockerwidget.cpp
 )
 
 if(TAKEOVER_WIN32_HTCAPTION_EVENT)

@@ -34,4 +34,9 @@
         <file alias="slider_box">assets/icons/autoreturnslider/slider_box.png</file>
         <file alias="slider_handle">assets/icons/autoreturnslider/slider_handle.png</file>
     </qresource>
+
+
+    <qresource prefix="/qmwidgets/images">
+        <file alias="wait.gif">assets/images/wait.gif</file>
+    </qresource>
 </RCC>
