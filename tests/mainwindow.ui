@@ -36,6 +36,19 @@ QWidget [Style=&quot;Title&quot;] &gt; QToolButton:hover {
 }</string>
    </property>
   </widget>
+  <widget class="QmQRCodeView" name="widget_2" native="true">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>80</y>
+     <width>201</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="text" stdset="0">
+    <string>Yueyue Shi is dog</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -43,6 +56,12 @@ QWidget [Style=&quot;Title&quot;] &gt; QToolButton:hover {
    <class>QmCollapsibleWidget</class>
    <extends>QWidget</extends>
    <header>qmcollapsiblewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QmQRCodeView</class>
+   <extends>QWidget</extends>
+   <header>qmqrcodeview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

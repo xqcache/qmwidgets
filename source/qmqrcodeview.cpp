@@ -115,10 +115,10 @@ void QmQRCodeView::paintEvent(QPaintEvent* event)
         return;
     }
 
-    int w = 0;
-    int h = 0;
-    int dw = 0;
-    int dh = 0;
+    qreal w = 0;
+    qreal h = 0;
+    qreal dw = 0;
+    qreal dh = 0;
 
     if (m_square) {
         w = h = qMin(width(), height());
@@ -132,6 +132,8 @@ void QmQRCodeView::paintEvent(QPaintEvent* event)
     dh = h / static_cast<QRcode*>(m_qrcode)->width;
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     // 亮色
     QPen lightPen(m_lightColor);
@@ -145,12 +147,12 @@ void QmQRCodeView::paintEvent(QPaintEvent* event)
                 // 绘制dark块
                 painter.setPen(darkPen);
                 painter.setBrush(darkBrush);
-                painter.drawRect(j * dw, i * dh, dw, dh);
+                painter.drawRect(QRectF(j * dw, i * dh, dw, dh));
             } else {
                 // 绘制light块
                 painter.setPen(lightPen);
                 painter.setBrush(lightBrush);
-                painter.drawRect(j * dw, i * dh, dw, dh);
+                painter.drawRect(QRectF(j * dw, i * dh, dw, dh));
             }
         }
     }

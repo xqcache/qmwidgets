@@ -73,6 +73,7 @@ set(PRIVATE_SOURCES
 )
 
 target_sources(${TARGET_NAME} PRIVATE ${PRIVATE_SOURCES})
+set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "d")
 
 if(TAKEOVER_WIN32_HTCAPTION_EVENT)
     # set(TAKEOVER_WIN32_HTCAPTION_EVENT)
@@ -106,11 +107,17 @@ if(QMWIDGET_INSTALL)
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT QmWidgets
     )
-    install(FILES ${_header_files} TYPE INCLUDE)
+    install(FILES ${_header_files}
+        TYPE INCLUDE
+        COMPONENT QmWidgets
+    )
+
     install(EXPORT QmWidgetsTargets
         FILE qmwidgetsWidgets.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets
+        COMPONENT QmWidgets
     )
 
     include(CMakePackageConfigHelpers)
@@ -119,5 +126,16 @@ if(QMWIDGET_INSTALL)
         "${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake"
         INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets"
     )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets")
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets"
+        COMPONENT QmWidgets
+    )
+
+    set(CPACK_PACKAGE_NAME qmwidgets)
+    set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+    set(CPACK_PACKAGE_VENDOR xqliang)
+    set(CPACK_PACKAGE_DESCRIPTION "Qt自定义控件")
+    set(CPACK_GENERATOR ZIP)
+
+    include(CPack)
 endif()
