@@ -7,8 +7,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 if(BUILD_QMWIDGETS_SHARED_LIBS OR BUILD_SHARED_LIBS)
     add_library(${TARGET_NAME} SHARED)
     target_compile_definitions(${TARGET_NAME} PRIVATE QMWIDGETS_COMPILE_LIB)
@@ -19,9 +17,13 @@ endif()
 
 target_link_libraries(${TARGET_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_precompile_headers(${TARGET_NAME} PRIVATE "stdafx.h")
-target_include_directories(${TARGET_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+target_include_directories(${TARGET_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:include>
+)
 
-target_sources(${TARGET_NAME} PRIVATE
+set(PRIVATE_SOURCES
     qmassets.qrc
     qmanalogclock.h
     qmanalogclock.cpp
@@ -70,6 +72,8 @@ target_sources(${TARGET_NAME} PRIVATE
     qmasyncblockerwidget.cpp
 )
 
+target_sources(${TARGET_NAME} PRIVATE ${PRIVATE_SOURCES})
+
 if(TAKEOVER_WIN32_HTCAPTION_EVENT)
     # set(TAKEOVER_WIN32_HTCAPTION_EVENT)
 endif()
@@ -94,5 +98,26 @@ if(BUILD_QMWIDGETS_HARDWARE_MONITOR)
 endif()
 
 if(QMWIDGET_INSTALL)
-    install(TARGETS ${TARGET_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    get_target_property(_header_files ${TARGET_NAME} SOURCES)
+    list(FILTER _header_files INCLUDE REGEX ".*\\.h$")
+    list(TRANSFORM _header_files PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+
+    install(TARGETS ${TARGET_NAME} EXPORT QmWidgetsTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+    install(FILES ${_header_files} TYPE INCLUDE)
+    install(EXPORT QmWidgetsTargets
+        FILE qmwidgetsWidgets.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets
+    )
+
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/qmwidgetsConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake"
+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets"
+    )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets")
 endif()
