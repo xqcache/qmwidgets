@@ -6,8 +6,6 @@
 #include <QPen>
 #include <QTimer>
 
-#define MIN(a, b) (((a) > (b)) ? (b) : (a))
-
 class QmAnalogClockPrivate {
 private:
     QDateTime dateTime;
@@ -211,7 +209,7 @@ void QmAnalogClock::paintEvent(QPaintEvent* event)
     QPointF c = r.center();
 
     qreal padding = 10;
-    qreal baseLength = MIN(width(), height());
+    qreal baseLength = qMin(width(), height());
 
     qreal dialRadius = baseLength * 0.95 / 2;
 

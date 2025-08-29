@@ -17,14 +17,17 @@ endif()
 
 target_link_libraries(${TARGET_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_precompile_headers(${TARGET_NAME} PRIVATE "stdafx.h")
+target_include_directories(${TARGET_NAME} PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+)
 target_include_directories(${TARGET_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 
 set(PRIVATE_SOURCES
     qmassets.qrc
+    qmwidgets_global.h
     qmanalogclock.h
     qmanalogclock.cpp
     qmcirclelight.h
@@ -109,13 +112,13 @@ if(QMWIDGET_INSTALL)
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT QmWidgets
     )
-    install(FILES ${_header_files}
+    install(FILES ${_header_files} ${CMAKE_CURRENT_BINARY_DIR}/qmwidgets_config.h
         TYPE INCLUDE
         COMPONENT QmWidgets
     )
 
     install(EXPORT QmWidgetsTargets
-        FILE qmwidgetsWidgets.cmake
+        FILE qmwidgetsTargets.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets
         COMPONENT QmWidgets
     )

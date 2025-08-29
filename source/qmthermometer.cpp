@@ -310,7 +310,7 @@ void QmThermometer::paintEvent(QPaintEvent* event)
     p.save();
     qreal padding = 5;
 
-    qreal baseLength = (MIN(r.width(), r.height()) - 2 * padding) * 0.55;
+    qreal baseLength = (qMin(r.width(), r.height()) - 2 * padding) * 0.55;
     qreal outerBottomDiameter = baseLength;
     qreal outerTopDiameter = outerBottomDiameter / 2;
 

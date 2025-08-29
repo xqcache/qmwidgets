@@ -49,7 +49,7 @@ void QmCircleLight::paintEvent(QPaintEvent* event)
 
     QRectF r = rect();
     QPointF c = r.center();
-    qreal baseLength = MIN(width(), height());
+    qreal baseLength = qMin(width(), height());
     qreal borderOutRadius = baseLength * 0.9 / 2;
     qreal borderInRadius = borderOutRadius * 0.9;
 

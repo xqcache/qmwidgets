@@ -151,7 +151,7 @@ void QmImageAnalogClock::paintEvent(QPaintEvent* event)
 {
     QPainter p(this);
     QRectF r;
-    r.setSize(QSizeF(MIN(width(), height()), MIN(width(), height())));
+    r.setSize(QSizeF(qMin(width(), height()), qMin(width(), height())));
     r.moveLeft((width() - r.width()) / 2);
     r.moveTop((height() - r.height()) / 2);
     QPointF c = r.center();
