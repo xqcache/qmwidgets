@@ -1,7 +1,10 @@
 #include "qmqrcodeview.h"
 #include <QtGui/QPainter>
 #include <iostream>
+
+extern "C" {
 #include <qrencode.h>
+}
 
 QmQRCodeView::QmQRCodeView(const QString& text, QWidget* parent)
     : QWidget(parent)
@@ -33,7 +36,7 @@ void QmQRCodeView::setText(const QString& text)
     if (m_qrcode != nullptr) {
         QRcode_free(static_cast<QRcode*>(m_qrcode));
     }
-    m_qrcode = QRcode_encodeData(m_text.size(), reinterpret_cast<const unsigned char*>(m_text.toStdString().c_str()), 0, QR_ECLEVEL_H);
+    m_qrcode = QRcode_encodeData(m_text.size(), reinterpret_cast<const unsigned char*>(m_text.toUtf8().constData()), 0, QR_ECLEVEL_H);
     update();
 }
 
