@@ -112,29 +112,34 @@ if(QMWIDGET_INSTALL)
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT QmWidgets
     )
+
+    if(BUILD_QMWIDGETS_SHARED_LIBS OR BUILD_SHARED_LIBS)
+        install(FILES $<TARGET_PDB_FILE:${TARGET_NAME}> DESTINATION ${CMAKE_INSTALL_BINDIR} CONFIGURATIONS Debug)
+    endif()
+
     install(FILES ${_header_files} ${CMAKE_CURRENT_BINARY_DIR}/qmwidgets_config.h
         TYPE INCLUDE
         COMPONENT QmWidgets
     )
 
     install(EXPORT QmWidgetsTargets
-        FILE qmwidgetsTargets.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets
+        FILE ${TARGET_NAME}Targets.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${TARGET_NAME}
         COMPONENT QmWidgets
     )
 
     include(CMakePackageConfigHelpers)
     configure_package_config_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/qmwidgetsConfig.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake"
-        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/${TARGET_NAME}Config.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}Config.cmake"
+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${TARGET_NAME}"
     )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qmwidgetsConfig.cmake
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qmwidgets"
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}Config.cmake
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${TARGET_NAME}"
         COMPONENT QmWidgets
     )
 
-    set(CPACK_PACKAGE_NAME qmwidgets)
+    set(CPACK_PACKAGE_NAME ${TARGET_NAME})
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
     set(CPACK_PACKAGE_VENDOR xqliang)
     set(CPACK_PACKAGE_DESCRIPTION "Qt自定义控件")

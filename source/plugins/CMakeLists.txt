@@ -43,5 +43,7 @@ if(BUILD_QRCODEVIEW)
 endif()
 
 if(QMWIDGET_INSTALL)
-    install(TARGETS ${TARGET_NAME} DESTINATION plugins/designer)
+    install(TARGETS ${TARGET_NAME}
+        RUNTIME DESTINATION plugins/designer
+    )
 endif()
