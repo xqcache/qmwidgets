@@ -11,6 +11,7 @@ QmImageButton::QmImageButton(QWidget* parent)
     : QAbstractButton(parent)
     , d_(new QmImageButtonPrivate)
 {
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
 QmImageButton::QmImageButton(const QIcon& icon, QWidget* parent)
@@ -44,6 +45,7 @@ void QmImageButton::mouseReleaseEvent(QMouseEvent* event)
 void QmImageButton::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
+    // initPainter(&painter);
     QSize icon_size = iconSize();
 
     if (d_->pressed) {
@@ -60,12 +62,18 @@ void QmImageButton::paintEvent(QPaintEvent* event)
     }
 
     QPixmap pixmap;
+    QStyleOptionButton opt;
+    opt.initFrom(this);
+    style()->drawControl(QStyle::CE_PushButtonBevel, &opt, &painter, this);
 
     if (isEnabled()) {
-        if (d_->hovered) {
+        if (isCheckable()) {
+            QIcon::State state = isChecked() ? QIcon::On : QIcon::Off;
+            pixmap = icon().pixmap(icon_size, QIcon::Normal, state);
+        } else if (d_->hovered) {
             pixmap = icon().pixmap(icon_size, QIcon::Active);
         } else {
-            pixmap = icon().pixmap(icon_size, QIcon::Normal, (!isCheckable() || (isCheckable() && isChecked())) ? QIcon::On : QIcon::Off);
+            pixmap = icon().pixmap(icon_size, QIcon::Normal);
         }
     } else {
         pixmap = icon().pixmap(icon_size, QIcon::Disabled);
