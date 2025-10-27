@@ -97,7 +97,7 @@ bool QmFramelessWindow::nativeEvent(const QByteArray& eventType, void* message, 
             if (menu_widget->rect().contains(pos)) {
                 // 判断当前是否点击在了MenuWidget的子控件上了，如果点在空白区域，就支持标题栏移动
                 QWidget* child = menu_widget->childAt(pos);
-                if (!child) {
+                if (!child || child->property("WindowTitleBar").toBool()) {
                     *result = HTCAPTION;
                     return true;
                 }
