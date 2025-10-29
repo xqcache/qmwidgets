@@ -210,3 +210,8 @@ QRect QmNinePatchPixmap::scaledInnerRect(const QRect& target)
     target_size.setHeight(target_size.height() - (origin_size.height() - inner_rect_.height()));
     return QRect(inner_rect_.topLeft(), target_size);
 }
+
+bool QmNinePatchPixmap::isNull() const
+{
+    return origin_.isNull();
+}

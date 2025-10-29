@@ -27,6 +27,8 @@ public:
     QSize size() const;
     QRect rect() const;
 
+    bool isNull() const;
+
     void draw(const QRect& target, QPainter* painter);
 
 private:
