@@ -8,6 +8,31 @@ QmNinePatchPixmap::QmNinePatchPixmap(const QString& path, const QRect& inner_rec
     setInnerRect(inner_rect);
 }
 
+QmNinePatchPixmap::QmNinePatchPixmap(const QPixmap& pixmap)
+    : origin_(pixmap)
+{
+    if (!inner_rect_.isNull()) {
+        setInnerRect(inner_rect_);
+    }
+}
+
+QmNinePatchPixmap::QmNinePatchPixmap()
+{
+}
+
+void QmNinePatchPixmap::setPixmap(const QPixmap& pixmap)
+{
+    origin_ = pixmap;
+    if (!inner_rect_.isNull()) {
+        setInnerRect(inner_rect_);
+    }
+}
+
+const QPixmap& QmNinePatchPixmap::pixmap() const
+{
+    return origin_;
+}
+
 const QPixmap& QmNinePatchPixmap::partPixmap(Part part) const
 {
     if (inner_rect_.isNull()) {
@@ -80,7 +105,7 @@ void QmNinePatchPixmap::draw(const QRect& target, QPainter* painter)
         return;
     }
 
-    if (inner_rect_.isNull()) {
+    if (inner_rect_.isNull() || inner_rect_.width() == 0 || inner_rect_.height() == 0) {
         painter->drawPixmap(target, origin_);
         return;
     }

@@ -10,6 +10,7 @@ QmImageShadowWidget::QmImageShadowWidget(QWidget* parent)
     : QWidget(parent)
     , d_(new QmImageShadowWidgetPrivate)
 {
+    d_->pixmap = std::make_unique<QmNinePatchPixmap>();
 }
 
 QmImageShadowWidget::~QmImageShadowWidget() noexcept
@@ -50,4 +51,34 @@ void QmImageShadowWidget::paintEvent(QPaintEvent* event)
     }
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
     d_->pixmap->draw(rect(), &painter);
+}
+
+void QmImageShadowWidget::setShadowPixmap(const QPixmap& pixmap)
+{
+    d_->pixmap->setPixmap(pixmap);
+}
+
+void QmImageShadowWidget::setContentGeometry(const QRect& content_geo)
+{
+    d_->pixmap->setInnerRect(content_geo);
+}
+
+const QPixmap& QmImageShadowWidget::shadowPixmap() const
+{
+    return d_->pixmap->pixmap();
+}
+
+QRect QmImageShadowWidget::contentGeometry() const
+{
+    return d_->pixmap->innerRect();
+}
+
+int QmImageShadowWidget::blurRadius() const
+{
+    return contentsMargins().left();
+}
+
+void QmImageShadowWidget::setBlurRadius(int blur_radius)
+{
+    setContentsMargins(blur_radius, blur_radius, blur_radius, blur_radius);
 }

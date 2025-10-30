@@ -18,6 +18,11 @@ public:
     };
 
     explicit QmNinePatchPixmap(const QString& path, const QRect& inner_rect);
+    explicit QmNinePatchPixmap(const QPixmap& pixmap);
+    QmNinePatchPixmap();
+
+    void setPixmap(const QPixmap& pixmap);
+    const QPixmap& pixmap() const;
 
     void setInnerRect(const QRect& rect);
     QRect innerRect() const;
