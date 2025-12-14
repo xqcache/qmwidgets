@@ -7,26 +7,13 @@ class QmShadowFrame : public QWidget {
 public:
     explicit QmShadowFrame(QWidget* parent = nullptr);
 
-    void setCornerRadius(qreal r)
-    {
-        radius_ = r;
-        update();
-    }
-    void setShadowMargin(int m)
-    {
-        margin_ = m;
-        updateGeometry();
-        update();
-    }
-    int shadowMargin() const
-    {
-        return margin_;
-    }
-
+    void setShadowMargin(int m);
     void setShadowEnabled(bool enabled);
 
+    void setCornerRadius(qreal r);
     qreal cornerRadius() const;
 
+    int shadowMargin() const;
     QMargins shadowMargins() const;
 
 protected:

@@ -60,18 +60,36 @@ void QmShadowFrame::paintShadow(QPainter& painter)
     painter.drawPath(card);
 }
 
-QMargins QmShadowFrame::shadowMargins() const
-{
-    return QMargins(margin_, margin_, margin_, margin_);
-}
-
 void QmShadowFrame::setShadowEnabled(bool enabled)
 {
     shadow_enabled_ = enabled;
     update();
 }
 
+void QmShadowFrame::setCornerRadius(qreal r)
+{
+    radius_ = r;
+    update();
+}
+
 qreal QmShadowFrame::cornerRadius() const
 {
     return radius_;
+}
+
+void QmShadowFrame::setShadowMargin(int m)
+{
+    margin_ = m;
+    updateGeometry();
+    update();
+}
+
+QMargins QmShadowFrame::shadowMargins() const
+{
+    return QMargins(margin_, margin_, margin_, margin_);
+}
+
+int QmShadowFrame::shadowMargin() const
+{
+    return margin_;
 }
