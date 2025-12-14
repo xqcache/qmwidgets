@@ -39,8 +39,8 @@ void QmShadowFrame::paintShadow(QPainter& painter)
         // 经验：6~10层足够，alpha 递减，扩散递增
         for (int i = 0; i < margin_; ++i) {
             const qreal t = (i + 1) / 10.0; // 0..1
-            const qreal spread = 0.5 + t * margin_; // 扩散半径
-            const qreal alpha = 10.0 * (1.0 - t) * (1.0 - t) * (1.0 - t); // 二次衰减更自然
+            const qreal spread = 0.8 + t * margin_; // 扩散半径
+            const qreal alpha = 18.0 * (1.0 - t) * (1.0 - t) * (1.0 - t); // 二次衰减更自然
 
             QRectF sr = contentRect.adjusted(-spread, -spread, spread, spread);
             QPainterPath sp = roundedRectPath(sr, radius_ + spread * 0.55);
