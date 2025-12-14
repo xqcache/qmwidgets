@@ -73,6 +73,8 @@ set(PRIVATE_SOURCES
     qmimageshadowwidget.cpp
     qmasyncblockerwidget.h
     qmasyncblockerwidget.cpp
+    qmshadowframe.h
+    qmshadowframe.cpp
 )
 
 target_sources(${TARGET_NAME} PRIVATE ${PRIVATE_SOURCES})

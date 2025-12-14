@@ -1,70 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindowClass</class>
- <widget class="QWidget" name="MainWindowClass">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1010</width>
-    <height>838</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QmCollapsibleWidget" name="widget" native="true">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>280</y>
-     <width>371</width>
-     <height>231</height>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>33</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">QWidget [Style=&quot;Title&quot;] {
-	background: gray;
-}
-
-QWidget [Style=&quot;Title&quot;] &gt; QToolButton {
-	border: none;
-}
-
-QWidget [Style=&quot;Title&quot;] &gt; QToolButton:hover {
-	background: lightgray;
-}</string>
-   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
-  <widget class="QmQRCodeView" name="widget_2" native="true">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>80</y>
-     <width>201</width>
-     <height>201</height>
-    </rect>
-   </property>
-   <property name="text" stdset="0">
-    <string>Yueyue Shi is dog</string>
-   </property>
-  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>QmCollapsibleWidget</class>
-   <extends>QWidget</extends>
-   <header>qmcollapsiblewidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QmQRCodeView</class>
-   <extends>QWidget</extends>
-   <header>qmqrcodeview.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

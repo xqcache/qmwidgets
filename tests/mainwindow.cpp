@@ -6,14 +6,12 @@
 #include <QPlainTextEdit>
 #include <QTimer>
 
-
 MainWindow::MainWindow(QWidget* parent)
-    : QWidget(parent)
+    : QmFramelessWindow(parent)
 {
     QMWIDGETS_INITIALIZE_RESOURCE
     ui.setupUi(this);
-
-    ui.widget->setWidget(new QPlainTextEdit(this));
+    setTitleBar(ui.menubar);
 }
 
 MainWindow::~MainWindow() noexcept

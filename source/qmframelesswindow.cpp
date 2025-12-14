@@ -1,45 +1,39 @@
 #include "qmframelesswindow.h"
-#include "qmwidgets_config.h"
+#include "qmshadowframe.h"
+#include <QLayout>
+#include <QMouseEvent>
 
 #if defined(WIN32) || defined(WIN64)
-// clang-format off
 #include <Windows.h>
-#include <WinUser.h>
-#include <dwmapi.h>
 #include <windowsx.h>
-#pragma comment(lib, "dwmapi.lib")
-// clang-format on
 #endif
-
-namespace {
-static constexpr int kResizeBorderWidth = 8;
-}
 
 struct QmFramelessWindowPrivate {
     QWidget* title_bar { nullptr };
+    QmShadowFrame* shadow_frame { nullptr };
 
-#if (!defined(WIN32) || !defined(WIN64)) || !defined(TAKEOVER_WIN32_HTCAPTION_EVENT)
-    QPoint mouse_pos;
-    bool mouse_pressed { false };
-#endif
+    QmFramelessWindow::ResizeRegion resize_region { QmFramelessWindow::ResizeRegion::None };
+
+    QRect resize_geo;
+    QPoint resize_mouse_pos;
+    bool resize_pressed { false };
+
+    QPoint title_mouse_pos;
+    bool title_mouse_pressed { false };
 };
 
 QmFramelessWindow::QmFramelessWindow(QWidget* parent)
     : QMainWindow(parent)
     , d_(new QmFramelessWindowPrivate)
 {
-    setWindowFlags(
-        windowFlags() | Qt::WindowType::Window | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+    setWindowFlags(Qt::WindowType::Window | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint
+        | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setMouseTracking(false);
 
-#if defined(WIN32) || defined(WIN64)
-    auto hwnd = reinterpret_cast<HWND>(this->winId());
-    LONG style = GetWindowLong(hwnd, GWL_STYLE);
-    SetWindowLong(hwnd, GWL_STYLE, style | WS_THICKFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_MAXIMIZEBOX);
-
-    // 必须保留一个像素的边框，不然Windows不会绘制窗口阴影
-    const MARGINS shadow = { 1, 1, 1, 1 };
-    ::DwmExtendFrameIntoClientArea(hwnd, &shadow);
-#endif
+    d_->shadow_frame = new QmShadowFrame(this);
+    d_->shadow_frame->installEventFilter(this);
+    setContentsMargins(d_->shadow_frame->shadowMargins());
 }
 
 QmFramelessWindow::~QmFramelessWindow() noexcept
@@ -53,9 +47,7 @@ void QmFramelessWindow::setTitleBar(QWidget* widget)
         return;
     }
     if (d_->title_bar) {
-#if (!defined(WIN32) || !defined(WIN64)) || !defined(TAKEOVER_WIN32_HTCAPTION_EVENT)
         d_->title_bar->removeEventFilter(this);
-#endif
         removeEventFilter(d_->title_bar);
     }
 
@@ -63,15 +55,90 @@ void QmFramelessWindow::setTitleBar(QWidget* widget)
     connect(d_->title_bar, &QObject::destroyed, this, [this] { d_->title_bar = nullptr; });
     setMenuWidget(d_->title_bar);
     installEventFilter(d_->title_bar);
-
-#if (!defined(WIN32) || !defined(WIN64)) || !defined(TAKEOVER_WIN32_HTCAPTION_EVENT)
     d_->title_bar->installEventFilter(this);
-#endif
 }
 
-bool QmFramelessWindow::nativeEvent(const QByteArray& eventType, void* message, qint64* result)
+bool QmFramelessWindow::event(QEvent* event)
 {
-#if defined(WIN32) || defined(WIN64)
+    switch (event->type()) {
+    case QEvent::WindowStateChange:
+        if (isMaximized()) {
+            setContentsMargins(QMargins(0, 0, 0, 0));
+            d_->shadow_frame->setShadowEnabled(false);
+        } else {
+            setContentsMargins(d_->shadow_frame->shadowMargins());
+            d_->shadow_frame->setShadowEnabled(true);
+        }
+        return true;
+    case QEvent::Resize:
+        d_->shadow_frame->setGeometry(rect());
+        return true;
+    case QEvent::MouseButtonPress: {
+        auto* mouse_evt = static_cast<QMouseEvent*>(event);
+        if (d_->resize_region != ResizeRegion::None && mouse_evt->buttons() == Qt::LeftButton) {
+            d_->resize_geo = geometry();
+            d_->resize_mouse_pos = mouse_evt->globalPosition().toPoint();
+            d_->resize_pressed = true;
+        }
+    } break;
+    case QEvent::MouseMove: {
+        auto* mouse_evt = static_cast<QMouseEvent*>(event);
+        if (d_->resize_pressed && mouse_evt->buttons() == Qt::NoButton || d_->resize_region != ResizeRegion::None) {
+            performResize(mouse_evt->globalPosition().toPoint());
+        }
+    } break;
+    default:
+        break;
+    }
+    return QMainWindow::event(event);
+}
+
+bool QmFramelessWindow::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == d_->title_bar) {
+        switch (event->type()) {
+        case QEvent::MouseButtonDblClick:
+            if (window()->isMaximized()) {
+                window()->showNormal();
+            } else {
+                window()->showMaximized();
+            }
+            return true;
+        case QEvent::MouseButtonPress:
+            if (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton) {
+                d_->title_mouse_pos = static_cast<QMouseEvent*>(event)->pos();
+                d_->title_mouse_pressed = true;
+                return true;
+            }
+            break;
+        case QEvent::MouseMove:
+            if (d_->resize_region == ResizeRegion::None && d_->title_mouse_pressed && !window()->isMaximized()) {
+                window()->move(window()->pos() + static_cast<QMouseEvent*>(event)->pos() - d_->title_mouse_pos);
+                return true;
+            }
+            break;
+        case QEvent::MouseButtonRelease:
+            if (d_->title_mouse_pressed) {
+                d_->title_mouse_pressed = false;
+                return true;
+            }
+            break;
+        default:
+            break;
+        }
+    } else if (watched == d_->shadow_frame) {
+        switch (event->type()) {
+        case QEvent::MouseMove:
+            return false;
+        default:
+            break;
+        }
+    }
+    return QMainWindow::eventFilter(watched, event);
+}
+
+bool QmFramelessWindow::nativeEvent(const QByteArray& event_type, void* message, qint64* result)
+{
     MSG* msg = reinterpret_cast<MSG*>(message);
     switch (msg->message) {
     case WM_NCCALCSIZE: {
@@ -81,99 +148,15 @@ bool QmFramelessWindow::nativeEvent(const QByteArray& eventType, void* message, 
     case WM_NCHITTEST: {
         long x = GET_X_LPARAM(msg->lParam);
         long y = GET_Y_LPARAM(msg->lParam);
-        QPoint mouse_pos(x, y);
+        qreal dpr = devicePixelRatioF();
+        QPoint mouse_pos(x / dpr, y / dpr);
         // 判断当前鼠标点击的位置在什么地方（让Windows决定如何进行Resize）
-        *result = adjustResizeWindow(msg->hwnd, mouse_pos);
-        if (0 != *result) {
-            return true;
-        }
-
-#if defined(TAKEOVER_WIN32_HTCAPTION_EVENT)
-        QWidget* menu_widget = menuWidget();
-        if (menu_widget) {
-            // support highdpi
-            double dpr = devicePixelRatioF();
-            QPoint pos = menu_widget->mapFromGlobal(QPoint(x / dpr, y / dpr));
-            if (menu_widget->rect().contains(pos)) {
-                // 判断当前是否点击在了MenuWidget的子控件上了，如果点在空白区域，就支持标题栏移动
-                QWidget* child = menu_widget->childAt(pos);
-                if (!child || child->property("WindowTitleBar").toBool()) {
-                    *result = HTCAPTION;
-                    return true;
-                }
-            }
-        }
-#endif
-    } break;
-    default:
-        return QMainWindow::nativeEvent(eventType, message, result);
+        d_->resize_region = hitTest(mapFromGlobal(mouse_pos));
+        updateCursor(d_->resize_region);
     }
-#else
-    return QMainWindow::nativeEvent(eventType, message, result);
-#endif
-    return QMainWindow::nativeEvent(eventType, message, result);
-}
-
-bool QmFramelessWindow::event(QEvent* event)
-{
-#if defined(WIN32) || defined(WIN64)
-    if (event->type() == QEvent::WindowStateChange) {
-        if (isMaximized()) {
-            RECT frame = { 0, 0, 0, 0 };
-            AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
-            double dpr = devicePixelRatioF();
-            frame.left = std::abs(frame.left / dpr);
-            frame.top = std::abs(frame.bottom / dpr) - 1;
-            frame.bottom = std::abs(frame.bottom / dpr);
-            frame.right = std::abs(frame.right / dpr) - 1;
-            setContentsMargins(frame.left, frame.top, frame.right, frame.bottom);
-        } else {
-            setContentsMargins(QMargins(0, 0, 0, 0));
-        }
-    }
-#endif
-    return QMainWindow::event(event);
-}
-
-bool QmFramelessWindow::eventFilter(QObject* watched, QEvent* event)
-{
-    if (watched != d_->title_bar) {
-        return QMainWindow::eventFilter(watched, event);
     }
 
-#if (!defined(WIN32) || !defined(WIN64)) || !defined(TAKEOVER_WIN32_HTCAPTION_EVENT)
-    switch (event->type()) {
-    case QEvent::MouseButtonDblClick:
-        if (window()->isMaximized()) {
-            window()->showNormal();
-        } else {
-            window()->showMaximized();
-        }
-        return true;
-    case QEvent::MouseButtonPress:
-        if (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton) {
-            d_->mouse_pos = static_cast<QMouseEvent*>(event)->pos();
-            d_->mouse_pressed = true;
-            return true;
-        }
-        break;
-    case QEvent::MouseMove:
-        if (d_->mouse_pressed && !window()->isMaximized()) {
-            window()->move(window()->pos() + static_cast<QMouseEvent*>(event)->pos() - d_->mouse_pos);
-            return true;
-        }
-        break;
-    case QEvent::MouseButtonRelease:
-        if (d_->mouse_pressed) {
-            d_->mouse_pressed = false;
-            return true;
-        }
-        break;
-    default:
-        break;
-    }
-#endif
-    return QMainWindow::eventFilter(watched, event);
+    return QMainWindow::nativeEvent(event_type, message, result);
 }
 
 QWidget* QmFramelessWindow::titleBar() const
@@ -181,52 +164,92 @@ QWidget* QmFramelessWindow::titleBar() const
     return d_->title_bar;
 }
 
-#if defined(WIN32) || defined(WIN64)
-int QmFramelessWindow::adjustResizeWindow(HWND hwnd, const QPoint& pos)
+QmFramelessWindow::ResizeRegion QmFramelessWindow::hitTest(const QPoint& pos) const
 {
-    int result = 0;
-
-    RECT winrect;
-    GetWindowRect(HWND(winId()), &winrect);
-
-    int mouse_x = pos.x();
-    int mouse_y = pos.y();
-
-    bool resizeWidth = minimumWidth() != maximumWidth();
-    bool resizeHieght = minimumHeight() != maximumHeight();
-
-    if (resizeWidth) {
-        if (mouse_x > winrect.left && mouse_x < winrect.left + kResizeBorderWidth)
-            result = HTLEFT;
-        if (mouse_x < winrect.right && mouse_x >= winrect.right - kResizeBorderWidth)
-            result = HTRIGHT;
+    if (isMaximized() || isFullScreen()) {
+        return ResizeRegion::None;
     }
-    if (resizeHieght) {
-        if (mouse_y < winrect.top + kResizeBorderWidth && mouse_y >= winrect.top)
-            result = HTTOP;
+    const auto& geo = d_->shadow_frame->geometry().marginsRemoved(d_->shadow_frame->shadowMargins() - 2);
+    qreal corner_radius = d_->shadow_frame->cornerRadius();
 
-        if (mouse_y <= winrect.bottom && mouse_y > winrect.bottom - kResizeBorderWidth)
-            result = HTBOTTOM;
+    bool is_left = pos.x() <= geo.left();
+    bool is_top = pos.y() <= geo.top();
+    bool is_right = pos.x() >= geo.right();
+    bool is_bottom = pos.y() >= geo.bottom();
+
+    if (pos.x() <= geo.left() + corner_radius && pos.y() <= geo.top() + corner_radius) {
+        return ResizeRegion::TopLeft;
     }
-    if (resizeWidth && resizeHieght) {
-        // topleft corner
-        if (mouse_x >= winrect.left && mouse_x < winrect.left + kResizeBorderWidth && mouse_y >= winrect.top
-            && mouse_y < winrect.top + kResizeBorderWidth) {
-            result = HTTOPLEFT;
-        }
-        // topRight corner
-        if (mouse_x <= winrect.right && mouse_x > winrect.right - kResizeBorderWidth && mouse_y >= winrect.top
-            && mouse_y < winrect.top + kResizeBorderWidth)
-            result = HTTOPRIGHT;
-        // leftBottom  corner
-        if (mouse_x >= winrect.left && mouse_x < winrect.left + kResizeBorderWidth && mouse_y <= winrect.bottom
-            && mouse_y > winrect.bottom - kResizeBorderWidth)
-            result = HTBOTTOMLEFT;
-        // rightbottom  corner
-        if (mouse_x <= winrect.right && mouse_x > winrect.right - kResizeBorderWidth && mouse_y <= winrect.bottom
-            && mouse_y > winrect.bottom - kResizeBorderWidth)
-            result = HTBOTTOMRIGHT;
+    if (pos.x() <= geo.left() + corner_radius && pos.y() >= geo.bottom() - corner_radius) {
+        return ResizeRegion::BottomLeft;
     }
-    return result;
+    if (pos.x() >= geo.right() - corner_radius && pos.y() <= geo.top() + corner_radius) {
+        return ResizeRegion::TopRight;
+    }
+    if (pos.x() >= geo.right() - corner_radius && pos.y() >= geo.bottom() - corner_radius) {
+        return ResizeRegion::BottomRight;
+    }
+
+    if (is_left) {
+        return ResizeRegion::Left;
+    }
+    if (is_right) {
+        return ResizeRegion::Right;
+    }
+    if (is_top) {
+        return ResizeRegion::Top;
+    }
+    if (is_bottom) {
+        return ResizeRegion::Bottom;
+    }
+
+    return ResizeRegion::None;
 }
-#endif
+
+void QmFramelessWindow::updateCursor(ResizeRegion r)
+{
+    switch (r) {
+    case ResizeRegion::Left:
+    case ResizeRegion::Right:
+        setCursor(Qt::SizeHorCursor);
+        break;
+    case ResizeRegion::Top:
+    case ResizeRegion::Bottom:
+        setCursor(Qt::SizeVerCursor);
+        break;
+    case ResizeRegion::TopLeft:
+    case ResizeRegion::BottomRight:
+        setCursor(Qt::SizeFDiagCursor);
+        break;
+    case ResizeRegion::TopRight:
+    case ResizeRegion::BottomLeft:
+        setCursor(Qt::SizeBDiagCursor);
+        break;
+    default:
+        setCursor(Qt::ArrowCursor);
+        break;
+    }
+}
+
+void QmFramelessWindow::performResize(const QPoint& pos)
+{
+    QRect geo = geometry();
+
+    if (d_->resize_region == ResizeRegion::Left || d_->resize_region == ResizeRegion::TopLeft
+        || d_->resize_region == ResizeRegion::BottomLeft) {
+        geo.setLeft(pos.x() - d_->shadow_frame->shadowMargin());
+    }
+    if (d_->resize_region == ResizeRegion::Right || d_->resize_region == ResizeRegion::TopRight
+        || d_->resize_region == ResizeRegion::BottomRight) {
+        geo.setRight(pos.x() + d_->shadow_frame->shadowMargin());
+    }
+    if (d_->resize_region == ResizeRegion::Top || d_->resize_region == ResizeRegion::TopRight
+        || d_->resize_region == ResizeRegion::TopLeft) {
+        geo.setTop(pos.y() - d_->shadow_frame->shadowMargin());
+    }
+    if (d_->resize_region == ResizeRegion::Bottom || d_->resize_region == ResizeRegion::BottomLeft
+        || d_->resize_region == ResizeRegion::BottomRight) {
+        geo.setBottom(pos.y() + d_->shadow_frame->shadowMargin());
+    }
+    setGeometry(geo);
+}

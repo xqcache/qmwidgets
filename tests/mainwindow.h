@@ -1,11 +1,12 @@
 #pragma once
 
+#include "qmframelesswindow.h"
 #include "ui_mainwindow.h"
 #include <QtWidgets/QWidget>
 
 class QmHardwareInfo;
 
-class MainWindow : public QWidget {
+class MainWindow : public QmFramelessWindow {
     Q_OBJECT
 
 public:
@@ -17,5 +18,5 @@ private Q_SLOTS:
     // void on_widget_toggled(bool checked);
 
 private:
-    Ui::MainWindowClass ui;
+    Ui::MainWindow ui;
 };
