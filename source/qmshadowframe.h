@@ -1,8 +1,9 @@
 #pragma once
 
+#include "qmwidgets_global.h"
 #include <QWidget>
 
-class QmShadowFrame : public QWidget {
+class QMWIDGETS_EXPORT QmShadowFrame : public QWidget {
     Q_OBJECT
 public:
     explicit QmShadowFrame(QWidget* parent = nullptr);
@@ -15,6 +16,8 @@ public:
 
     int shadowMargin() const;
     QMargins shadowMargins() const;
+
+    std::function<void(QPainter*)> onPaint;
 
 protected:
     void paintEvent(QPaintEvent*) override;

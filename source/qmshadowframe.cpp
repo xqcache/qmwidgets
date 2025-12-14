@@ -16,14 +16,15 @@ QPainterPath roundedRectPath(const QRectF& r, qreal radius)
 QmShadowFrame::QmShadowFrame(QWidget* parent)
     : QWidget(parent)
 {
-    setAttribute(Qt::WA_TranslucentBackground);
-    // setFocusPolicy(Qt::FocusPolicy::NoFocus);
-    // setAttribute(Qt::WA_TransparentForMouseEvents);
+    setAttribute(Qt::WA_StyledBackground);
+    setFocusPolicy(Qt::FocusPolicy::NoFocus);
+    setAttribute(Qt::WA_TransparentForMouseEvents);
 }
 
 void QmShadowFrame::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
+    initPainter(&painter);
     painter.setRenderHint(QPainter::Antialiasing);
     paintShadow(painter);
 }
@@ -51,13 +52,19 @@ void QmShadowFrame::paintShadow(QPainter& painter)
 
     // 2) 画内容卡片（背景）
     QPainterPath card = roundedRectPath(shadow_enabled_ ? contentRect : rect(), shadow_enabled_ ? radius_ : 0);
-    painter.fillPath(card, palette().brush(backgroundRole()));
+    painter.fillPath(card, palette().brush(QPalette::ColorRole::Window));
 
-    // 3) 轻微描边（Win11 很常见的“卡片边”）
-    QPen pen(QColor(0, 0, 0, 18));
-    pen.setWidthF(1.0);
-    painter.setPen(pen);
-    painter.drawPath(card);
+    if (shadow_enabled_) {
+        // 3) 轻微描边（Win11 很常见的“卡片边”）
+        QPen pen(QColor(0, 0, 0, 18));
+        pen.setWidthF(1.0);
+        painter.setPen(pen);
+        painter.drawPath(card);
+    }
+
+    if (onPaint) {
+        onPaint(&painter);
+    }
 }
 
 void QmShadowFrame::setShadowEnabled(bool enabled)

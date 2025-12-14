@@ -33,6 +33,7 @@ QmFramelessWindow::QmFramelessWindow(QWidget* parent)
 
     d_->shadow_frame = new QmShadowFrame(this);
     d_->shadow_frame->installEventFilter(this);
+    d_->shadow_frame->setCornerRadius(5);
     setContentsMargins(d_->shadow_frame->shadowMargins());
 }
 

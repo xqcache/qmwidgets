@@ -51,6 +51,11 @@ QmSwitch::~QmSwitch()
 
 QSize QmSwitch::sizeHint() const
 {
+    return minimumSizeHint();
+}
+
+QSize QmSwitch::minimumSizeHint() const
+{
     return { fontMetrics().height() * 2, fontMetrics().height() };
 }
 

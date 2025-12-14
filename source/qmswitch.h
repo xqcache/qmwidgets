@@ -47,6 +47,7 @@ public:
     void setUncheckedText(const QString& text);
 
     QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 Q_SIGNALS:
     void toggled(bool checked);

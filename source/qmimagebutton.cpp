@@ -45,7 +45,7 @@ void QmImageButton::mouseReleaseEvent(QMouseEvent* event)
 void QmImageButton::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    // initPainter(&painter);
+    initPainter(&painter);
     QSize icon_size = iconSize();
 
     if (d_->pressed) {
