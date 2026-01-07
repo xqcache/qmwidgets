@@ -12,13 +12,16 @@ public:
     ~QmAsyncBlockerWidget() noexcept override;
 
     void setText(const QString& text);
-    void setTask(const std::function<void()>& task);
+    void setTask(const std::function<void(std::atomic_bool&)>& task);
 
-    static void runTask(QWidget* parent, const QString& text, const std::function<void()>& task);
+    QSize sizeHint() const override;
+
+    static void runTask(QWidget* parent, const QString& text, const std::function<void(std::atomic_bool&)>& task);
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
 private:
     void initUi();
