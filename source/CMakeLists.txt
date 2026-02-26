@@ -47,6 +47,8 @@ set(PRIVATE_SOURCES
     qmcirclestatus.cpp
     qmframelesswindow.h
     qmframelesswindow.cpp
+    qmframelessdialog.h
+    qmframelessdialog.cpp
     qmcrossbutton.h
     qmcrossbutton.cpp
     qmgradientseparator.h
