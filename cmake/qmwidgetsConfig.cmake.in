@@ -1,3 +1,20 @@
 @PACKAGE_INIT@
 
+find_package(QT NAMES Qt6 Qt5 CONFIG REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} CONFIG REQUIRED COMPONENTS Widgets)
+
 include(${CMAKE_CURRENT_LIST_DIR}/qmwidgetsTargets.cmake)
+
+if(MSVC AND TARGET qmwidgets)
+    get_target_property(_qmwidgets_imported_configs qmwidgets IMPORTED_CONFIGURATIONS)
+    foreach(_qmwidgets_cfg IN LISTS _qmwidgets_imported_configs)
+        get_target_property(_qmwidgets_location qmwidgets "IMPORTED_LOCATION_${_qmwidgets_cfg}")
+        if(_qmwidgets_location)
+            get_filename_component(_qmwidgets_dir "${_qmwidgets_location}" DIRECTORY)
+            get_filename_component(_qmwidgets_name_we "${_qmwidgets_location}" NAME_WE)
+            set_target_properties(qmwidgets PROPERTIES
+                "IMPORTED_PDB_${_qmwidgets_cfg}" "${_qmwidgets_dir}/${_qmwidgets_name_we}.pdb"
+            )
+        endif()
+    endforeach()
+endif()
